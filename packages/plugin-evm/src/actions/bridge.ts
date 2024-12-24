@@ -1,4 +1,4 @@
-import type { IAgentRuntime, Memory, State } from "@ai16z/eliza";
+import type { IAgentRuntime, Memory, State } from "@elizaos/core";
 import {
     createConfig,
     executeRoute,

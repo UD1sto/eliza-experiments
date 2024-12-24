@@ -1,7 +1,7 @@
 import { Keypair, PublicKey } from "@solana/web3.js";
-import { DeriveKeyProvider, TEEMode } from "@ai16z/plugin-tee";
+import { DeriveKeyProvider, TEEMode } from "@elizaos/plugin-tee";
 import bs58 from "bs58";
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@elizaos/core";
 
 export interface KeypairResult {
     keypair?: Keypair;
@@ -23,7 +23,9 @@ export async function getWalletKey(
     if (teeMode !== TEEMode.OFF) {
         const walletSecretSalt = runtime.getSetting("WALLET_SECRET_SALT");
         if (!walletSecretSalt) {
-            throw new Error("WALLET_SECRET_SALT required when TEE_MODE is enabled");
+            throw new Error(
+                "WALLET_SECRET_SALT required when TEE_MODE is enabled"
+            );
         }
 
         const deriveKeyProvider = new DeriveKeyProvider(teeMode);

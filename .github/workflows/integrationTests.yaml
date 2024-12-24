@@ -25,6 +25,8 @@ jobs:
               run: pnpm run smokeTests
     integration-tests:
         runs-on: ubuntu-latest
+        env:
+            OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         steps:
             - uses: actions/checkout@v4
 
@@ -43,13 +45,21 @@ jobs:
             - name: Build packages
               run: pnpm build
 
-            - name: Run integration tests
-              env:
-                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+            - name: Check for API key
+              id: check_api_key
               run: |
                   if [ -z "$OPENAI_API_KEY" ]; then
-                    echo "Skipping integration tests due to missing required API keys"
-                    exit 1
+                    echo "::set-output name=api_key_present::false"
                   else
-                    pnpm run integrationTests
+                    echo "::set-output name=api_key_present::true"
                   fi
+
+            - name: Run integration tests
+              if: steps.check_api_key.outputs.api_key_present == 'true'
+              run: pnpm run integrationTests
+
+            - name: Skip integration tests
+              if: steps.check_api_key.outputs.api_key_present == 'false'
+              run: |
+                  echo "Skipping integration tests due to missing required API keys"
+                  exit 1

@@ -3,7 +3,7 @@ import {
     IAgentRuntime,
     Memory,
     type Action,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import { Connection, Keypair, PublicKey, Transaction } from "@solana/web3.js";
 import { getQuote } from "./swapUtils.ts";
 import { getWalletKey } from "../keypairUtils.ts";

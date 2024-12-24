@@ -13,7 +13,7 @@ The `DeriveKeyProvider` allows for secure key derivation within a TEE environmen
 #### Usage
 
 ```typescript
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
+import { DeriveKeyProvider } from "@elizaos/plugin-tee";
 
 // Initialize the provider
 const provider = new DeriveKeyProvider();

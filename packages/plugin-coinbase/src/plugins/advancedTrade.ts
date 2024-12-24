@@ -11,7 +11,7 @@ import {
     generateObject,
     ModelClass,
     Provider,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import { advancedTradeTemplate } from "../templates";
 import { isAdvancedTradeContent, AdvancedTradeSchema } from "../types";
 import { readFile } from "fs/promises";

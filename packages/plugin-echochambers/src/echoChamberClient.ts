@@ -1,4 +1,4 @@
-import { elizaLogger, IAgentRuntime } from "@ai16z/eliza";
+import { elizaLogger, IAgentRuntime } from "@elizaos/core";
 import {
     ChatMessage,
     ChatRoom,

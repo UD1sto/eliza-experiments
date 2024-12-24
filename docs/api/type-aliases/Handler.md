@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.6-alpha.4](../index.md) / Handler
+[@elizaos/core v0.1.6-alpha.4](../index.md) / Handler
 
 # Type Alias: Handler()
 
@@ -24,4 +24,4 @@ Handler function type for processing messages
 
 ## Defined in
 
-[packages/core/src/types.ts:374](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L374)
+[packages/core/src/types.ts:374](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L374)

@@ -1,6 +1,6 @@
 # Eliza - Multi-agent simulation framework
 
-# https://github.com/ai16z/eliza
+# https://github.com/elizaos/eliza
 
 # Visit https://eliza.builders for support
 
@@ -102,7 +102,6 @@ TWITTER_DRY_RUN=false
 TWITTER_USERNAME= # Account username
 TWITTER_PASSWORD= # Account password
 TWITTER_EMAIL= # Account email
-TWITTER_COOKIES= # Account cookies
 
 X_SERVER_URL=
 XAI_API_KEY=

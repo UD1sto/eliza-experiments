@@ -1,9 +1,9 @@
 import {
     SqliteDatabaseAdapter,
     loadVecExtensions,
-} from "@ai16z/adapter-sqlite";
-import { SqlJsDatabaseAdapter } from "@ai16z/adapter-sqljs";
-import { SupabaseDatabaseAdapter } from "@ai16z/adapter-supabase";
+} from "@elizaos/adapter-sqlite";
+import { SqlJsDatabaseAdapter } from "@elizaos/adapter-sqljs";
+import { SupabaseDatabaseAdapter } from "@elizaos/adapter-supabase";
 import { DatabaseAdapter } from "../database.ts";
 import { getEndpoint } from "../models.ts";
 import { AgentRuntime } from "../runtime.ts";

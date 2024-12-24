@@ -13,7 +13,7 @@ import {
     stringToUuid,
     elizaLogger,
     getEmbeddingZeroVector,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import { EchoChamberClient } from "./echoChamberClient";
 import { ChatMessage } from "./types";
 

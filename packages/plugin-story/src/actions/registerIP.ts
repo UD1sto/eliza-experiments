@@ -7,7 +7,7 @@ import {
     type IAgentRuntime,
     type Memory,
     type State,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import pinataSDK from "@pinata/sdk";
 import { RegisterIpResponse } from "@story-protocol/core-sdk";
 import { createHash } from "crypto";

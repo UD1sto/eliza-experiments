@@ -1,4 +1,4 @@
-import { elizaLogger, Client, IAgentRuntime, Plugin } from "@ai16z/eliza";
+import { elizaLogger, Client, IAgentRuntime, Plugin } from "@elizaos/core";
 import { EchoChamberClient } from "./echoChamberClient";
 import { InteractionClient } from "./interactions";
 import { EchoChamberConfig } from "./types";

@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.6-alpha.4](../index.md) / Character
+[@elizaos/core v0.1.6-alpha.4](../index.md) / Character
 
 # Type Alias: Character
 
@@ -214,7 +214,7 @@ Optional configuration
 
 #### Index Signature
 
- \[`key`: `string`\]: `string`
+\[`key`: `string`\]: `string`
 
 ### settings.intiface?
 
@@ -276,7 +276,7 @@ New structured ElevenLabs config
 
 #### Index Signature
 
- \[`key`: `string`\]: `any`[]
+\[`key`: `string`\]: `any`[]
 
 ### settings.chains.evm?
 
@@ -440,4 +440,4 @@ Optional NFT prompt
 
 ## Defined in
 
-[packages/core/src/types.ts:629](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L629)
+[packages/core/src/types.ts:629](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L629)

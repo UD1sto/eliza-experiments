@@ -1,4 +1,4 @@
-import { IAgentRuntime } from "@ai16z/eliza";
+import { IAgentRuntime } from "@elizaos/core";
 import { z } from "zod";
 
 export const zksyncEnvSchema = z.object({
@@ -18,7 +18,7 @@ export async function validateZKsyncConfig(
                 process.env.ZKSYNC_ADDRESS,
             ZKSYNC_PRIVATE_KEY:
                 runtime.getSetting("ZKSYNC_PRIVATE_KEY") ||
-                process.env.ZKSYNC_PRIVATE_KEY
+                process.env.ZKSYNC_PRIVATE_KEY,
         };
 
         return zksyncEnvSchema.parse(config);

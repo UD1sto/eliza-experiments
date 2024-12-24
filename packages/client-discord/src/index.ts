@@ -5,7 +5,7 @@ import {
     Character,
     Client as ElizaClient,
     IAgentRuntime,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import {
     Client,
     Events,
@@ -117,11 +117,11 @@ export class DiscordClient extends EventEmitter {
 
     async stop() {
         try {
-          // disconnect websocket
-          // this unbinds all the listeners
-          await this.client.destroy();
-        } catch(e) {
-          elizaLogger.error('client-discord instance stop err', e);
+            // disconnect websocket
+            // this unbinds all the listeners
+            await this.client.destroy();
+        } catch (e) {
+            elizaLogger.error("client-discord instance stop err", e);
         }
     }
 
@@ -404,11 +404,11 @@ export const DiscordClientInterface: ElizaClient = {
     start: async (runtime: IAgentRuntime) => new DiscordClient(runtime),
     stop: async (runtime: IAgentRuntime) => {
         try {
-          // stop it
-          elizaLogger.log('Stopping discord client', runtime.agentId)
-          await runtime.clients.discord.stop()
-        } catch(e) {
-          elizaLogger.error('client-discord interface stop error', e);
+            // stop it
+            elizaLogger.log("Stopping discord client", runtime.agentId);
+            await runtime.clients.discord.stop();
+        } catch (e) {
+            elizaLogger.error("client-discord interface stop error", e);
         }
     },
 };

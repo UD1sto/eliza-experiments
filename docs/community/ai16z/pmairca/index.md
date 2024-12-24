@@ -4,7 +4,6 @@ title: Marc AIndreeson
 
 # Marc AIndreeson
 
-
 An AI character based on Marc Andreessen's thinking, writing, and investment philosophy.
 
 - 💬 Natural conversation with Marc's personality
@@ -18,7 +17,7 @@ An AI character based on Marc Andreessen's thinking, writing, and investment phi
 - 25 books real Marc recommends: https://x.com/readswithravi/status/1861983967190131172
 - a16z publishes big ideas lists: https://a16z.com/big-ideas-in-tech-2025/
 - pmairca workgroup: https://discord.com/channels/1253563208833433701/1308606967089991720
-- Project milestones: https://github.com/ai16z/pmarca/milestone/1
+- Project milestones: https://github.com/elizaos/pmarca/milestone/1
 - Techno-Optimist Manifesto: https://a16z.com/the-techno-optimist-manifesto/
 - AI for startups: https://a16z.com/ai-for-startups/
 - Why Software Is Eating The World: https://a16z.com/why-software-is-eating-the-world/
@@ -39,7 +38,6 @@ https://a16zcrypto.com/posts/podcast/ai-bots-memecoins/
 
 ## Trade Strategy
 
-
 ![image (3)](https://hackmd.io/_uploads/rJKwrwmEkl.png)
 
 3 main components
@@ -48,16 +46,19 @@ https://a16zcrypto.com/posts/podcast/ai-bots-memecoins/
 - Marc Everywhere
 
 Marketplace of Trust
+
 - The virtual marketplace derives trust scores (0-1, normalized to 100) based on simulated trades using market data
 - A leaderboard displays usernames and trust scores, without any wallet information to avoid perverse incentives
 - No actual token custody or trades at first, as it operates solely in a virtual environment.
 
 Core Components:
+
 1. Trust Extraction: User recommendations, lightweight process, weighted by trust scores
 2. Trust Evaluation: AI agent places bets, updates trust scores based on outcomes
 3. Social Reinforcement: Public trust profiles, incentives for reputation-building, community moderation
 
 Economic Incentives:
+
 - -Direct incentives for high-quality recommendations tied to AI betting outcomes
 - Public profiles add social incentives for maintaining good reputation
 - Potential perverse incentives: information asymmetry, gaming, collusion, social issues
@@ -66,8 +67,8 @@ Economic Incentives:
 ### 1. Liquidation Phase
 
 There's two trade strategies that are based off multiple metrics, with a leading metric on 24hr volume:
-- If under $500k, there is a random order DCA sell of that asset(not full holdings sell) the constraints are a maximum of $500 and at least 5 hours apart. 
+
+- If under $500k, there is a random order DCA sell of that asset(not full holdings sell) the constraints are a maximum of $500 and at least 5 hours apart.
 - If over $500k, the sells are made into buy volume on the asset, from a random 20-40% of the incoming buy(ie; 1 sol buy - 0.2-0.4 sol sell)
 
-
-70% of profits actively go into ai16z, purchased over 200k ai16z tokens so far
+70% of profits actively go into elizaos, purchased over 200k elizaos tokens so far

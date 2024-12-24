@@ -4,22 +4,23 @@
         "check-types": {
             "dependsOn": ["build"]
         },
-        "@ai16z/agent#check-types": {
+        "@elizaos/agent#check-types": {
             "dependsOn": [
-                "@ai16z/plugin-solana#build",
-                "@ai16z/plugin-direct#build"
+                "@elizaos/plugin-solana#build",
+                "@elizaos/plugin-direct#build"
             ]
         },
         "build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["^@ai16z/eliza#build"]
+            "dependsOn": ["^@elizaos/core#build"]
         },
-        "@ai16z/plugin-solana#build": {
+        "@elizaos/plugin-solana#build": {
             "outputs": ["dist/**"],
-            "dependsOn": ["@ai16z/plugin-trustdb#build"]
+            "dependsOn": ["@elizaos/plugin-trustdb#build"]
         },
-        "@ai16z/plugin-nft-generation#build": {
-            "dependsOn": ["@ai16z/plugin-node#build"]
+        "@elizaos/plugin-nft-generation#build": {
+            "outputs": ["dist/**"],
+            "dependsOn": ["@elizaos/plugin-node#build"]
         },
         "eliza-docs#build": {
             "outputs": ["build/**"]

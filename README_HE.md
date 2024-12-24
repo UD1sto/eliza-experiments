@@ -8,13 +8,13 @@
 
 <div align="center">
 
-📖 [תיעוד](https://ai16z.github.io/eliza/) | 🎯 [דוגמאות](https://github.com/thejoven/awesome-eliza)
-</div>
+📖 [תיעוד](https://elizaos.github.io/eliza/) | 🎯 [דוגמאות](https://github.com/thejoven/awesome-eliza)
 
+</div>
 
 <div align="center">
 
-[中文说明](https://github.com/ai16z/Elisa/blob/main/README_CN.md) | [日本語の説明](https://github.com/ai16z/Elisa/blob/main/README_JA.md) | [한국어 설명](https://github.com/ai16z/Elisa/blob/main/README_KOR.md) | [Français](https://github.com/ai16z/Elisa/blob/main/README_FR.md) | [Português](https://github.com/ai16z/Elisa/blob/main/README_PTBR.md) | [Türkçe](TR.md) | [Русский](https://github.com/ai16z/Elisa/blob/main/README_RU.md) | [Español](https://github.com/ai16z/Elisa/blob/main/README_ES.md) | [Italiano](https://github.com/ai16z/Elisa/blob/main/README_IT.md) | [ไทย](https://github.com/ai16z/Elisa/blob/main/README_TH.md) | [Deutsch](https://github.com/ai16z/Elisa/blob/main/README_DE.md) | [עִברִית](https://github.com/ai16z/Elisa/blob/main/README_HE.md)
+[中文说明](https://github.com/elizaos/Elisa/blob/main/README_CN.md) | [日本語の説明](https://github.com/elizaos/Elisa/blob/main/README_JA.md) | [한국어 설명](https://github.com/elizaos/Elisa/blob/main/README_KOR.md) | [Français](https://github.com/elizaos/Elisa/blob/main/README_FR.md) | [Português](https://github.com/elizaos/Elisa/blob/main/README_PTBR.md) | [Türkçe](TR.md) | [Русский](https://github.com/elizaos/Elisa/blob/main/README_RU.md) | [Español](https://github.com/elizaos/Elisa/blob/main/README_ES.md) | [Italiano](https://github.com/elizaos/Elisa/blob/main/README_IT.md) | [ไทย](https://github.com/elizaos/Elisa/blob/main/README_TH.md) | [Deutsch](https://github.com/elizaos/Elisa/blob/main/README_DE.md) | [עִברִית](https://github.com/elizaos/Elisa/blob/main/README_HE.md)
 
 </div>
 
@@ -22,15 +22,15 @@
 
 ## ✨ תכונות
 
--   🛠️ מחברים מלאים לדיסקורד, טוויטר וטלגרם
--   🔗 תמיכה בכל מודל (Llama, Grok, OpenAI, Anthropic, וכו')
--   👥 תמיכה בריבוי סוכנים וחדרים
--   📚 קל לשלב ולהשתמש במסמכים שלך
--   💾 זיכרון ומאגר מסמכים הניתנים לשליפה
--   🚀 ניתן להרחבה רבה - יצירת פעולות ולקוחות משלך
--   ☁️ תומך בהרבה מודלים (local Llama, OpenAI, Anthropic, Groq ,
-וכו')
--   📦 פשוט עובד!
+- 🛠️ מחברים מלאים לדיסקורד, טוויטר וטלגרם
+- 🔗 תמיכה בכל מודל (Llama, Grok, OpenAI, Anthropic, וכו')
+- 👥 תמיכה בריבוי סוכנים וחדרים
+- 📚 קל לשלב ולהשתמש במסמכים שלך
+- 💾 זיכרון ומאגר מסמכים הניתנים לשליפה
+- 🚀 ניתן להרחבה רבה - יצירת פעולות ולקוחות משלך
+- ☁️ תומך בהרבה מודלים (local Llama, OpenAI, Anthropic, Groq ,
+  וכו')
+- 📦 פשוט עובד!
 
 </div>
 
@@ -73,7 +73,7 @@
 <div align="right" dir="ltr">
 
 ```
-git clone https://github.com/ai16z/eliza-starter.git
+git clone https://github.com/elizaos/eliza-starter.git
 
 cp .env.example .env
 
@@ -82,26 +82,27 @@ pnpm i && pnpm start
 
 </div>
 
-
-לאחר מכן קרא את [התיעוד](https://ai16z.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
+לאחר מכן קרא את [התיעוד](https://elizaos.github.io/eliza/) כדי ללמוד כיצד להתאים את אלייזה.
 
 ### התחלה ידנית של אלייזה (מומלץ רק למי שיודע מה הוא עושה)
+
 <div align="right">
 
 ```
 # שכפול המאגר
-git clone https://github.com/ai16z/eliza.git
+git clone https://github.com/elizaos/eliza.git
 
 # מעבר לגרסה האחרונה
 git checkout $(git describe --tags --abbrev=0)
 ```
+
 </div>
 
 ### התחלת אלייזה עם Gitpod
 
 <div align="right">
 
-[![פתח ב-Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ai16z/eliza/tree/main)
+[![פתח ב-Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/elizaos/eliza/tree/main)
 
 </div>
 
@@ -136,6 +137,7 @@ sh scripts/start.sh
 1. פתח את `agent/src/character.ts` כדי לשנות את דמות ברירת המחדל. בטל הערה וערוך.
 
 2. לטעינת דמויות מותאמות אישית:
+
     - השתמש ב-`pnpm start --characters="path/to/your/character.json"`
     - ניתן לטעון מספר קבצי דמויות בו זמנית.
 
@@ -143,6 +145,7 @@ sh scripts/start.sh
     - שנה `"clients": []` ל-`"clients": ["twitter"]` בקובץ הדמות כדי להתחבר ל-X.
 
 ### התחלה ידנית של אלייזה
+
 <div align="right">
 
 ```bash
@@ -153,6 +156,7 @@ pnpm start
 # לעיתים צריך לנקות את הפרויקט אם חוזרים אליו לאחר זמן
 pnpm clean
 ```
+
 </div>
 
 #### דרישות נוספות
@@ -167,23 +171,24 @@ pnpm install --include=optional sharp
 
 <div align="right">
 
-[GitHub Issues](https://github.com/ai16z/eliza/issues) מתאים ביותר עבור: באגים ופרופוזיציות לתכונות -
+[GitHub Issues](https://github.com/elizaos/eliza/issues) מתאים ביותר עבור: באגים ופרופוזיציות לתכונות -
 
 [Discord](https://discord.gg/ai16z) מתאים ביותר עבור: שיתוף היישומים שלך והשתתפות בקהילה -
+
 </div>
 
 ## תורמים
 
 <!-- <div align="right"> -->
 
-<a href="https://github.com/ai16z/eliza/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=ai16z/eliza" />
+<a href="https://github.com/elizaos/eliza/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=elizaos/eliza" />
 </a>
 
 <!-- </div> -->
 
 ## היסטוריית כוכבים
 
-[![תרשים היסטוריית כוכבים](https://api.star-history.com/svg?repos=ai16z/eliza&type=Date)](https://star-history.com/#ai16z/eliza&Date)
+[![תרשים היסטוריית כוכבים](https://api.star-history.com/svg?repos=elizaos/eliza&type=Date)](https://star-history.com/#elizaos/eliza&Date)
 
 </div>

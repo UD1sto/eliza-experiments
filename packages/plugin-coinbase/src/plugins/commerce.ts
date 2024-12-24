@@ -4,7 +4,7 @@ import {
     generateObject,
     ModelClass,
     Provider,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import {
     Action,
     HandlerCallback,
@@ -12,7 +12,7 @@ import {
     Memory,
     Plugin,
     State,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import { ChargeContent, ChargeSchema, isChargeContent } from "../types";
 import { chargeTemplate, getChargeTemplate } from "../templates";
 import { getWalletDetails } from "../utils";

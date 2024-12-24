@@ -995,6 +995,12 @@ export type CacheOptions = {
     expires?: number;
 };
 
+export enum CacheStore {
+    REDIS = "redis",
+    DATABASE = "database",
+    FILESYSTEM = "filesystem",
+}
+
 export interface ICacheManager {
     get<T = unknown>(key: string): Promise<T | undefined>;
     set<T>(key: string, value: T, options?: CacheOptions): Promise<void>;

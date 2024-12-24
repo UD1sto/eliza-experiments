@@ -1,13 +1,13 @@
 {
-  "name": "@ai16z/plugin-nft-generation",
-  "version": "0.1.6-alpha.4",
+  "name": "@elizaos/plugin-nft-generation",
+  "version": "0.1.7-alpha.1",
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@ai16z/eliza": "workspace:*",
-    "@ai16z/plugin-image-generation": "workspace:*",
-    "@ai16z/plugin-node": "workspace:*",
+    "@elizaos/core": "workspace:*",
+    "@elizaos/plugin-image-generation": "workspace:*",
+    "@elizaos/plugin-node": "workspace:*",
     "@metaplex-foundation/mpl-token-metadata": "^3.3.0",
     "@metaplex-foundation/mpl-toolbox": "^0.9.4",
     "@metaplex-foundation/umi": "^0.9.2",

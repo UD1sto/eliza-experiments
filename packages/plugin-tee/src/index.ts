@@ -1,4 +1,4 @@
-import { Plugin } from "@ai16z/eliza";
+import { Plugin } from "@elizaos/core";
 import { remoteAttestationProvider } from "./providers/remoteAttestationProvider";
 import { deriveKeyProvider } from "./providers/deriveKeyProvider";
 

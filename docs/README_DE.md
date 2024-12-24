@@ -1,6 +1,6 @@
 # Eliza - Multi-Agent-Simulationsframework
 
-# https://github.com/ai16z/eliza
+# https://github.com/elizaos/eliza
 
 # Besuchen Sie https://eliza.builders für Support
 
@@ -11,7 +11,7 @@
 _Wie gesehen bei [@DegenSpartanAI](https://x.com/degenspartanai) und [@MarcAIndreessen](https://x.com/pmairca)_
 
 - Multi-Agent-Simulationsframework
-- Fügen Sie beliebig viele einzigartige Charaktere mit  [characterfile](https://github.com/lalalune/characterfile/) hinzu
+- Fügen Sie beliebig viele einzigartige Charaktere mit [characterfile](https://github.com/lalalune/characterfile/) hinzu
 - Vollständige Discord- und Twitter-Anbindungen, mit Unterstützung für Discord-Sprachkanäle
 - Vollständiges Konversations- und Dokument-RAG-Gedächtnis
 - Kann Links und PDFs lesen, Audio und Videos transkribieren, Gespräche zusammenfassen und mehr
@@ -63,7 +63,7 @@ Sie können Grok-Modelle verwenden, indem Sie die `XAI_MODEL` Umgebungsvariable 
 
 ### Mit OpenAI ausführen
 
-Sie können OpenAI-Modelle verwenden, indem Sie die  `XAI_MODEL` Umgebungsvariable auf `gpt-4o-mini` oder `gpt-4o` setzen
+Sie können OpenAI-Modelle verwenden, indem Sie die `XAI_MODEL` Umgebungsvariable auf `gpt-4o-mini` oder `gpt-4o` setzen
 
 ## Zusätzliche Anforderungen
 
@@ -138,7 +138,7 @@ Stellen Sie sicher, dass Sie das CUDA Toolkit einschließlich cuDNN und cuBLAS i
 
 ### Lokal ausführen
 
-Fügen Sie XAI_MODEL und setzen Sie es auf eine der oben genannten Optionen aus [Mit Llama ausführen](#run-with-llama) -  Sie können X_SERVER_URL und XAI_API_KEY leer lassen, es lädt das Modell von Huggingface herunter und fragt es lokal ab.
+Fügen Sie XAI_MODEL und setzen Sie es auf eine der oben genannten Optionen aus [Mit Llama ausführen](#run-with-llama) - Sie können X_SERVER_URL und XAI_API_KEY leer lassen, es lädt das Modell von Huggingface herunter und fragt es lokal ab.
 
 # Clients
 
@@ -164,7 +164,7 @@ pnpm test:sqlite   # Tests mit SQLite ausführen
 pnpm test:sqljs    # Tests mit SQL.js ausführen
 ```
 
-Tests werden mit Jest geschrieben und befinden sich in  `src/**/*.test.ts`-Dateien. Die Testumgebung ist konfiguriert für:
+Tests werden mit Jest geschrieben und befinden sich in `src/**/*.test.ts`-Dateien. Die Testumgebung ist konfiguriert für:
 
 - Laden von Umgebungsvariablen aus `.env.test`
 - 2-Minuten-Timeout für länger laufende Tests

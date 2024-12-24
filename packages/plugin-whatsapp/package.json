@@ -1,6 +1,6 @@
 {
-  "name": "@ai16z/plugin-whatsapp",
-  "version": "0.1.6-alpha.4",
+  "name": "@elizaos/plugin-whatsapp",
+  "version": "0.1.7-alpha.1",
   "description": "WhatsApp Cloud API plugin",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -11,7 +11,7 @@
     "lint": "eslint --fix  --cache ."
   },
   "dependencies": {
-    "@ai16z/eliza": "workspace:*",
+    "@elizaos/core": "workspace:*",
     "axios": "1.7.8"
   },
   "devDependencies": {

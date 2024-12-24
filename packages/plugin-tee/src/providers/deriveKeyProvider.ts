@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@elizaos/core";
 import { Keypair } from "@solana/web3.js";
 import crypto from "crypto";
 import { DeriveKeyResponse, TappdClient } from "@phala/dstack-sdk";
@@ -20,39 +20,49 @@ class DeriveKeyProvider {
         let endpoint: string | undefined;
 
         // Both LOCAL and DOCKER modes use the simulator, just with different endpoints
-        switch(teeMode) {
+        switch (teeMode) {
             case TEEMode.LOCAL:
                 endpoint = "http://localhost:8090";
-                console.log("TEE: Connecting to local simulator at localhost:8090");
+                console.log(
+                    "TEE: Connecting to local simulator at localhost:8090"
+                );
                 break;
             case TEEMode.DOCKER:
                 endpoint = "http://host.docker.internal:8090";
-                console.log("TEE: Connecting to simulator via Docker at host.docker.internal:8090");
+                console.log(
+                    "TEE: Connecting to simulator via Docker at host.docker.internal:8090"
+                );
                 break;
             case TEEMode.PRODUCTION:
                 endpoint = undefined;
-                console.log("TEE: Running in production mode without simulator");
+                console.log(
+                    "TEE: Running in production mode without simulator"
+                );
                 break;
             default:
-                throw new Error(`Invalid TEE_MODE: ${teeMode}. Must be one of: LOCAL, DOCKER, PRODUCTION`);
+                throw new Error(
+                    `Invalid TEE_MODE: ${teeMode}. Must be one of: LOCAL, DOCKER, PRODUCTION`
+                );
         }
 
         this.client = endpoint ? new TappdClient(endpoint) : new TappdClient();
         this.raProvider = new RemoteAttestationProvider(teeMode);
     }
 
-    private async generateDeriveKeyAttestation(agentId: string, publicKey: string): Promise<RemoteAttestationQuote> {
+    private async generateDeriveKeyAttestation(
+        agentId: string,
+        publicKey: string
+    ): Promise<RemoteAttestationQuote> {
         const deriveKeyData: DeriveKeyAttestationData = {
             agentId,
-            publicKey
-        }
+            publicKey,
+        };
         const reportdata = JSON.stringify(deriveKeyData);
         console.log("Generating Remote Attestation Quote for Derive Key...");
         const quote = await this.raProvider.generateAttestation(reportdata);
         console.log("Remote Attestation Quote generated successfully!");
         return quote;
     }
-
 
     async rawDeriveKey(
         path: string,
@@ -80,7 +90,7 @@ class DeriveKeyProvider {
         path: string,
         subject: string,
         agentId: string
-    ): Promise<{ keypair: Keypair, attestation: RemoteAttestationQuote }> {
+    ): Promise<{ keypair: Keypair; attestation: RemoteAttestationQuote }> {
         try {
             if (!path || !subject) {
                 console.error(
@@ -116,7 +126,10 @@ class DeriveKeyProvider {
         path: string,
         subject: string,
         agentId: string
-    ): Promise<{ keypair: PrivateKeyAccount, attestation: RemoteAttestationQuote }> {
+    ): Promise<{
+        keypair: PrivateKeyAccount;
+        attestation: RemoteAttestationQuote;
+    }> {
         try {
             if (!path || !subject) {
                 console.error(

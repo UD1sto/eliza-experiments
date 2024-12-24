@@ -98,7 +98,6 @@ TWITTER_DRY_RUN=false
 TWITTER_USERNAME= # Nombre de usuario de la cuenta
 TWITTER_PASSWORD= # Contraseña de la cuenta
 TWITTER_EMAIL= # Correo electrónico de la cuenta
-TWITTER_COOKIES= # Cookies de la cuenta
 
 X_SERVER_URL=
 XAI_API_KEY=

@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@elizaos/core";
 import { TdxQuoteResponse, TappdClient } from "@phala/dstack-sdk";
 import { RemoteAttestationQuote, TEEMode } from "../types/tee";
 
@@ -9,32 +9,45 @@ class RemoteAttestationProvider {
         let endpoint: string | undefined;
 
         // Both LOCAL and DOCKER modes use the simulator, just with different endpoints
-        switch(teeMode) {
+        switch (teeMode) {
             case TEEMode.LOCAL:
                 endpoint = "http://localhost:8090";
-                console.log("TEE: Connecting to local simulator at localhost:8090");
+                console.log(
+                    "TEE: Connecting to local simulator at localhost:8090"
+                );
                 break;
             case TEEMode.DOCKER:
                 endpoint = "http://host.docker.internal:8090";
-                console.log("TEE: Connecting to simulator via Docker at host.docker.internal:8090");
+                console.log(
+                    "TEE: Connecting to simulator via Docker at host.docker.internal:8090"
+                );
                 break;
             case TEEMode.PRODUCTION:
                 endpoint = undefined;
-                console.log("TEE: Running in production mode without simulator");
+                console.log(
+                    "TEE: Running in production mode without simulator"
+                );
                 break;
             default:
-                throw new Error(`Invalid TEE_MODE: ${teeMode}. Must be one of: LOCAL, DOCKER, PRODUCTION`);
+                throw new Error(
+                    `Invalid TEE_MODE: ${teeMode}. Must be one of: LOCAL, DOCKER, PRODUCTION`
+                );
         }
 
         this.client = endpoint ? new TappdClient(endpoint) : new TappdClient();
     }
 
-    async generateAttestation(reportData: string): Promise<RemoteAttestationQuote> {
+    async generateAttestation(
+        reportData: string
+    ): Promise<RemoteAttestationQuote> {
         try {
             console.log("Generating attestation for: ", reportData);
-            const tdxQuote: TdxQuoteResponse = await this.client.tdxQuote(reportData);
+            const tdxQuote: TdxQuoteResponse =
+                await this.client.tdxQuote(reportData);
             const rtmrs = tdxQuote.replayRtmrs();
-            console.log(`rtmr0: ${rtmrs[0]}\nrtmr1: ${rtmrs[1]}\nrtmr2: ${rtmrs[2]}\nrtmr3: ${rtmrs[3]}f`);
+            console.log(
+                `rtmr0: ${rtmrs[0]}\nrtmr1: ${rtmrs[1]}\nrtmr2: ${rtmrs[2]}\nrtmr3: ${rtmrs[3]}f`
+            );
             const quote: RemoteAttestationQuote = {
                 quote: tdxQuote.quote,
                 timestamp: Date.now(),

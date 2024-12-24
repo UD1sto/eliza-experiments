@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.6-alpha.4](../index.md) / GenerationOptions
+[@elizaos/core v0.1.6-alpha.4](../index.md) / GenerationOptions
 
 # Interface: GenerationOptions
 
@@ -12,9 +12,9 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1236](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1236)
+[packages/core/src/generation.ts:1236](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1236)
 
-***
+---
 
 ### context
 
@@ -22,9 +22,9 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1237](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1237)
+[packages/core/src/generation.ts:1237](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1237)
 
-***
+---
 
 ### modelClass
 
@@ -32,9 +32,9 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1238](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1238)
+[packages/core/src/generation.ts:1238](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1238)
 
-***
+---
 
 ### schema?
 
@@ -42,9 +42,9 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1239](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1239)
+[packages/core/src/generation.ts:1239](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1239)
 
-***
+---
 
 ### schemaName?
 
@@ -52,9 +52,9 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1240](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1240)
+[packages/core/src/generation.ts:1240](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1240)
 
-***
+---
 
 ### schemaDescription?
 
@@ -62,9 +62,9 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1241](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1241)
+[packages/core/src/generation.ts:1241](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1241)
 
-***
+---
 
 ### stop?
 
@@ -72,9 +72,9 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1242](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1242)
+[packages/core/src/generation.ts:1242](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1242)
 
-***
+---
 
 ### mode?
 
@@ -82,14 +82,14 @@ Configuration options for generating objects with a model.
 
 #### Defined in
 
-[packages/core/src/generation.ts:1243](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1243)
+[packages/core/src/generation.ts:1243](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1243)
 
-***
+---
 
-### experimental\_providerMetadata?
+### experimental_providerMetadata?
 
-> `optional` **experimental\_providerMetadata**: `Record`\<`string`, `unknown`\>
+> `optional` **experimental_providerMetadata**: `Record`\<`string`, `unknown`\>
 
 #### Defined in
 
-[packages/core/src/generation.ts:1244](https://github.com/ai16z/eliza/blob/main/packages/core/src/generation.ts#L1244)
+[packages/core/src/generation.ts:1244](https://github.com/elizaos/eliza/blob/main/packages/core/src/generation.ts#L1244)

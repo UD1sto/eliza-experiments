@@ -1,4 +1,4 @@
-# `@ai16z/plugin-evm`
+# `@elizaos/plugin-evm`
 
 This plugin provides actions and providers for interacting with EVM-compatible chains.
 

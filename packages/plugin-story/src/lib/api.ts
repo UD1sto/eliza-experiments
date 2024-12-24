@@ -8,7 +8,7 @@ import {
     ResourceType,
     Trait,
 } from "../types/api";
-import { elizaLogger } from "@ai16z/eliza";
+import { elizaLogger } from "@elizaos/core";
 
 import { camelize } from "./utils";
 const API_BASE_URL = process.env.STORY_API_BASE_URL;

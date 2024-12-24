@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.6-alpha.4](../index.md) / ITextGenerationService
+[@elizaos/core v0.1.6-alpha.4](../index.md) / ITextGenerationService
 
 # Interface: ITextGenerationService
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/core/src/types.ts:1016](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1016)
+[packages/core/src/types.ts:1016](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L1016)
 
 ## Methods
 
@@ -48,9 +48,9 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1021](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1021)
+[packages/core/src/types.ts:1021](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L1021)
 
-***
+---
 
 ### initializeModel()
 
@@ -62,9 +62,9 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1136](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1136)
+[packages/core/src/types.ts:1136](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L1136)
 
-***
+---
 
 ### queueMessageCompletion()
 
@@ -78,11 +78,11 @@ Add abstract initialize method that must be implemented by derived classes
 
 • **stop**: `string`[]
 
-• **frequency\_penalty**: `number`
+• **frequency_penalty**: `number`
 
-• **presence\_penalty**: `number`
+• **presence_penalty**: `number`
 
-• **max\_tokens**: `number`
+• **max_tokens**: `number`
 
 #### Returns
 
@@ -90,9 +90,9 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1137](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1137)
+[packages/core/src/types.ts:1137](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L1137)
 
-***
+---
 
 ### queueTextCompletion()
 
@@ -106,11 +106,11 @@ Add abstract initialize method that must be implemented by derived classes
 
 • **stop**: `string`[]
 
-• **frequency\_penalty**: `number`
+• **frequency_penalty**: `number`
 
-• **presence\_penalty**: `number`
+• **presence_penalty**: `number`
 
-• **max\_tokens**: `number`
+• **max_tokens**: `number`
 
 #### Returns
 
@@ -118,9 +118,9 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1145](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1145)
+[packages/core/src/types.ts:1145](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L1145)
 
-***
+---
 
 ### getEmbeddingResponse()
 
@@ -136,4 +136,4 @@ Add abstract initialize method that must be implemented by derived classes
 
 #### Defined in
 
-[packages/core/src/types.ts:1153](https://github.com/ai16z/eliza/blob/main/packages/core/src/types.ts#L1153)
+[packages/core/src/types.ts:1153](https://github.com/elizaos/eliza/blob/main/packages/core/src/types.ts#L1153)

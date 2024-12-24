@@ -1,11 +1,11 @@
 {
-  "name": "@ai16z/plugin-flow",
-  "version": "0.1.6-alpha.4",
+  "name": "@elizaos/plugin-flow",
+  "version": "0.1.7-alpha.1",
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@ai16z/eliza": "workspace:*",
+    "@elizaos/core": "workspace:*",
     "@onflow/config": "1.5.1",
     "@onflow/fcl": "1.13.1",
     "@onflow/typedefs": "1.4.0",

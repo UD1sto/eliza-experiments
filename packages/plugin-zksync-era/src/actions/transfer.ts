@@ -9,16 +9,16 @@ import {
     type Action,
     elizaLogger,
     composeContext,
-    generateObject
-} from "@ai16z/eliza";
+    generateObject,
+} from "@elizaos/core";
 import { validateZKsyncConfig } from "../enviroment";
 
-import {Web3} from "web3";
-import { 
-    ZKsyncPlugin, 
+import { Web3 } from "web3";
+import {
+    ZKsyncPlugin,
     ZKsyncWallet,
     types,
-    Web3ZKsyncL2
+    Web3ZKsyncL2,
 } from "web3-plugin-zksync";
 
 export interface TransferContent extends Content {
@@ -29,8 +29,7 @@ export interface TransferContent extends Content {
 
 export function isTransferContent(
     content: TransferContent
-    ): content is TransferContent {
-
+): content is TransferContent {
     // Validate types
     const validTypes =
         typeof content.tokenAddress === "string" &&
@@ -50,7 +49,6 @@ export function isTransferContent(
 
     return validAddresses;
 }
-
 
 const transferTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
 
@@ -144,23 +142,27 @@ export default {
             const web3: Web3 = new Web3(/* optional L1 provider */);
 
             web3.registerPlugin(
-              new ZKsyncPlugin(
-                Web3ZKsyncL2.initWithDefaultProvider(types.Network.Mainnet),
-              ),
+                new ZKsyncPlugin(
+                    Web3ZKsyncL2.initWithDefaultProvider(types.Network.Mainnet)
+                )
             );
 
-            const smartAccount = new web3.ZKsync.SmartAccount({ address: PUBLIC_KEY, secret: "0x" + PRIVATE_KEY })
+            const smartAccount = new web3.ZKsync.SmartAccount({
+                address: PUBLIC_KEY,
+                secret: "0x" + PRIVATE_KEY,
+            });
 
             const transferTx = await smartAccount.transfer({
                 to: content.recipient,
                 token: content.tokenAddress,
-                amount: web3.utils.toWei(content.amount,'ether'),
+                amount: web3.utils.toWei(content.amount, "ether"),
             });
 
             const receipt = await transferTx.wait();
 
             elizaLogger.success(
-                "Transfer completed successfully! tx: " + receipt.transactionHash
+                "Transfer completed successfully! tx: " +
+                    receipt.transactionHash
             );
             if (callback) {
                 callback({
@@ -181,7 +183,7 @@ export default {
                 });
             }
             return false;
-        }            
+        }
     },
 
     examples: [
@@ -226,7 +228,6 @@ export default {
                     text: "Successfully sent 100 ZK to 0xbD8679cf79137042214fA4239b02F4022208EE82\nTransaction: 0x0b9f23e69ea91ba98926744472717960cc7018d35bc3165bdba6ae41670da0f0",
                 },
             },
-        ]
+        ],
     ] as ActionExample[][],
 } as Action;
-

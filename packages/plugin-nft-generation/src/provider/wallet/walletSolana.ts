@@ -26,7 +26,7 @@ import {
 import { getExplorerLink } from "@solana-developers/helpers";
 // import { transferSol } from "@metaplex-foundation/mpl-toolbox";
 import bs58 from "bs58";
-import { elizaLogger } from "@ai16z/eliza";
+import { elizaLogger } from "@elizaos/core";
 
 export class WalletSolana {
     private cache: NodeCache;

@@ -6,7 +6,7 @@ import {
     Memory,
     Plugin,
     State,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 
 import { createCollection } from "./handlers/createCollection.ts";
 import { createNFT } from "./handlers/createNFT.ts";
@@ -14,7 +14,6 @@ import { verifyNFT } from "./handlers/verifyNFT.ts";
 
 export * from "./provider/wallet/walletSolana.ts";
 export * from "./api.ts";
-
 
 export async function sleep(ms: number = 3000) {
     return new Promise((resolve) => {
@@ -78,7 +77,6 @@ const nftCollectionGeneration: Action = {
             });
 
             elizaLogger.log("NFT Address:", nftRes);
-
 
             callback({
                 text: `Congratulations to you! 🎉🎉🎉 \nCollection : ${collectionAddressRes.link}\n NFT: ${nftRes.link}`, //caption.description,

@@ -11,7 +11,7 @@ import {
     generateObject,
     ModelClass,
     Provider,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import { executeTradeAndCharityTransfer, getWalletDetails } from "../utils";
 import { tradeTemplate } from "../templates";
 import { isTradeContent, TradeContent, TradeSchema } from "../types";

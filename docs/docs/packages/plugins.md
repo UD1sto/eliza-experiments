@@ -28,7 +28,7 @@ interface Plugin {
 1. Install the desired plugin package:
 
 ```bash
-pnpm add @ai16z/plugin-[name]
+pnpm add @elizaos/plugin-[name]
 ```
 
 2. Import and register the plugin in your character configuration:
@@ -445,7 +445,7 @@ const response = await runtime.triggerAction("INVOKE_CONTRACT", {
 
 ---
 
-#### 8. TEE Plugin (`@ai16z/plugin-tee`)
+#### 8. TEE Plugin (`@elizaos/plugin-tee`)
 
 Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Trusted Execution Environment) functionality and deploy secure & privacy-enhanced Eliza Agents:
 
@@ -457,7 +457,7 @@ Integrates [Dstack SDK](https://github.com/Dstack-TEE/dstack) to enable TEE (Tru
 **DeriveKeyProvider Usage**
 
 ```typescript
-import { DeriveKeyProvider } from "@ai16z/plugin-tee";
+import { DeriveKeyProvider } from "@elizaos/plugin-tee";
 
 // Initialize the provider
 const provider = new DeriveKeyProvider();
@@ -501,7 +501,7 @@ try {
 **RemoteAttestationProvider Usage**
 
 ```typescript
-import { RemoteAttestationProvider } from "@ai16z/plugin-tee";
+import { RemoteAttestationProvider } from "@elizaos/plugin-tee";
 // Initialize the provider
 const provider = new RemoteAttestationProvider();
 // Generate Remote Attestation
@@ -540,25 +540,25 @@ Manages webhooks using the Coinbase SDK, allowing for the creation and managemen
 **Actions:**
 
 - `CREATE_WEBHOOK` - Create a new webhook to listen for specific events.
-  - **Inputs**:
-    - `networkId` (string): The network ID where the webhook should listen for events.
-    - `eventType` (string): The type of event to listen for (e.g., transfers).
-    - `eventFilters` (object, optional): Additional filters for the event.
-    - `eventTypeFilter` (string, optional): Specific event type filter.
-  - **Outputs**: Confirmation message with webhook details.
-  - **Example**:
-    ```json
-    {
-      "networkId": "base",
-      "eventType": "transfers",
-      "notificationUri": "https://your-notification-uri.com"
-    }
-    ```
+    - **Inputs**:
+        - `networkId` (string): The network ID where the webhook should listen for events.
+        - `eventType` (string): The type of event to listen for (e.g., transfers).
+        - `eventFilters` (object, optional): Additional filters for the event.
+        - `eventTypeFilter` (string, optional): Specific event type filter.
+    - **Outputs**: Confirmation message with webhook details.
+    - **Example**:
+        ```json
+        {
+            "networkId": "base",
+            "eventType": "transfers",
+            "notificationUri": "https://your-notification-uri.com"
+        }
+        ```
 
 **Providers:**
 
 - `webhookProvider` - Retrieves a list of all configured webhooks.
-  - **Outputs**: A list of webhooks with details such as ID, URL, event type, and status.
+    - **Outputs**: A list of webhooks with details such as ID, URL, event type, and status.
 
 **Description:**
 
@@ -569,20 +569,20 @@ The Webhook Plugin enables Eliza to interact with the Coinbase SDK to create and
 1. **Configure the Plugin**
    Add the plugin to your character’s configuration:
 
-   ```typescript
-   import { webhookPlugin } from "@eliza/plugin-coinbase-webhooks";
+    ```typescript
+    import { webhookPlugin } from "@eliza/plugin-coinbase-webhooks";
 
-   const character = {
-     plugins: [webhookPlugin],
-   };
-   ```
+    const character = {
+        plugins: [webhookPlugin],
+    };
+    ```
 
 2. **Ensure Secure Configuration**
    Set the following environment variables or runtime settings to ensure the plugin functions securely:
 
-   - `COINBASE_API_KEY`: API key for Coinbase SDK.
-   - `COINBASE_PRIVATE_KEY`: Private key for secure transactions.
-   - `COINBASE_NOTIFICATION_URI`: URI where notifications should be sent.
+    - `COINBASE_API_KEY`: API key for Coinbase SDK.
+    - `COINBASE_PRIVATE_KEY`: Private key for secure transactions.
+    - `COINBASE_NOTIFICATION_URI`: URI where notifications should be sent.
 
 **Example Call**
 
@@ -590,9 +590,9 @@ To create a webhook:
 
 ```typescript
 const response = await runtime.triggerAction("CREATE_WEBHOOK", {
-  networkId: "base",
-  eventType: "transfers",
-  notificationUri: "https://your-notification-uri.com"
+    networkId: "base",
+    eventType: "transfers",
+    notificationUri: "https://your-notification-uri.com",
 });
 console.log("Webhook creation response:", response);
 ```
@@ -608,7 +608,7 @@ console.log("Webhook creation response:", response);
 Create a new plugin by implementing the Plugin interface:
 
 ```typescript
-import { Plugin, Action, Evaluator, Provider } from "@ai16z/eliza";
+import { Plugin, Action, Evaluator, Provider } from "@elizaos/core";
 
 const myCustomPlugin: Plugin = {
     name: "my-custom-plugin",

@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.6-alpha.4](../index.md) / composeContext
+[@elizaos/core v0.1.6-alpha.4](../index.md) / composeContext
 
 # Function: composeContext()
 
@@ -50,4 +50,4 @@ const contextSimple = composeContext({ state, template });
 
 ## Defined in
 
-[packages/core/src/context.ts:28](https://github.com/ai16z/eliza/blob/main/packages/core/src/context.ts#L28)
+[packages/core/src/context.ts:28](https://github.com/elizaos/eliza/blob/main/packages/core/src/context.ts#L28)

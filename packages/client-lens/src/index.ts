@@ -1,4 +1,4 @@
-import { Client, IAgentRuntime, elizaLogger } from "@ai16z/eliza";
+import { Client, IAgentRuntime, elizaLogger } from "@elizaos/core";
 import { privateKeyToAccount } from "viem/accounts";
 import { LensClient } from "./client";
 import { LensPostManager } from "./post";

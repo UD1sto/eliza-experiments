@@ -1,4 +1,4 @@
-import { AwsS3Service } from "@ai16z/plugin-node";
+import { AwsS3Service } from "@elizaos/plugin-node";
 import {
     composeContext,
     elizaLogger,
@@ -8,11 +8,11 @@ import {
     Memory,
     ServiceType,
     stringToUuid,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import {
     saveBase64Image,
     saveHeuristImage,
-} from "@ai16z/plugin-image-generation";
+} from "@elizaos/plugin-image-generation";
 import { PublicKey } from "@solana/web3.js";
 import WalletSolana from "../provider/wallet/walletSolana.ts";
 

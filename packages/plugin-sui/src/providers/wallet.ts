@@ -4,11 +4,10 @@ import {
     Memory,
     Provider,
     State,
-} from "@ai16z/eliza";
-
+} from "@elizaos/core";
 
 import { getFullnodeUrl, SuiClient } from "@mysten/sui/client";
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
 
 import { MIST_PER_SUI } from "@mysten/sui/utils";
 import BigNumber from "bignumber.js";
@@ -56,7 +55,6 @@ export class WalletProvider {
             expires: Date.now() + 5 * 60 * 1000,
         });
     }
-
 
     private async getCachedData<T>(key: string): Promise<T | null> {
         // Check in-memory cache first
@@ -227,7 +225,9 @@ const walletProvider: Provider = {
 
         try {
             const suiClient = new SuiClient({
-                url: getFullnodeUrl(runtime.getSetting("SUI_NETWORK") as SuiNetwork),
+                url: getFullnodeUrl(
+                    runtime.getSetting("SUI_NETWORK") as SuiNetwork
+                ),
             });
             const provider = new WalletProvider(
                 suiClient,

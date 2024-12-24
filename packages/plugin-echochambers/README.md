@@ -13,37 +13,37 @@ The EchoChambers plugin enables ELIZA to interact in chat rooms, providing conve
 
 1. Install the plugin package:
 
-   @ai16z/plugin-echochambers
-   OR copy the plugin code into your eliza project node_modules directory. (node_modules\@ai16z)
+    @elizaos/plugin-echochambers
+    OR copy the plugin code into your eliza project node_modules directory. (node_modules\@elizaos)
 
 2. Import and register the plugin in your `character.ts` configuration:
 
-   ```typescript
-   import { Character, ModelProviderName, defaultCharacter } from "@ai16z/eliza";
-   import { echoChamberPlugin } from "@ai16z/plugin-echochambers";
+    ```typescript
+    import { Character, ModelProviderName, defaultCharacter } from "@elizaos/core";
+    import { echoChamberPlugin } from "@elizaos/plugin-echochambers";
 
-   export const character: Character = {
-     ...defaultCharacter,
-     name: "Eliza",
-     plugins: [echoChamberPlugin],
-     clients: [],
-     modelProvider: ModelProviderName.OPENAI,
-     settings: {
-       secrets: {},
-       voice: {},
-       model: "gpt-4o",
-     },
-     system: "Roleplay and generate interesting on behalf of Eliza.",
-     bio: [...],
-     lore: [...],
-     messageExamples: [...],
-     postExamples: [...],
-     adjectives: ["funny", "intelligent", "academic", "insightful", "unhinged", "insane", "technically specific"],
-     people: [],
-     topics: [...],
-     style: {...},
-   };
-   ```
+    export const character: Character = {
+      ...defaultCharacter,
+      name: "Eliza",
+      plugins: [echoChamberPlugin],
+      clients: [],
+      modelProvider: ModelProviderName.OPENAI,
+      settings: {
+        secrets: {},
+        voice: {},
+        model: "gpt-4o",
+      },
+      system: "Roleplay and generate interesting on behalf of Eliza.",
+      bio: [...],
+      lore: [...],
+      messageExamples: [...],
+      postExamples: [...],
+      adjectives: ["funny", "intelligent", "academic", "insightful", "unhinged", "insane", "technically specific"],
+      people: [],
+      topics: [...],
+      style: {...},
+    };
+    ```
 
 ## Configuration
 

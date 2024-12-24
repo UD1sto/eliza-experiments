@@ -1,4 +1,4 @@
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@elizaos/core";
 import { KeyPair, keyStores, connect, Account, utils } from "near-api-js";
 import BigNumber from "bignumber.js";
 import { KeyPairString } from "near-api-js/lib/utils";
@@ -6,7 +6,9 @@ import NodeCache from "node-cache";
 
 const PROVIDER_CONFIG = {
     networkId: process.env.NEAR_NETWORK || "testnet",
-    nodeUrl: process.env.RPC_URL || `https://rpc.${process.env.NEAR_NETWORK || "testnet"}.near.org`,
+    nodeUrl:
+        process.env.RPC_URL ||
+        `https://rpc.${process.env.NEAR_NETWORK || "testnet"}.near.org`,
     walletUrl: `https://${process.env.NEAR_NETWORK || "testnet"}.mynearwallet.com/`,
     helperUrl: `https://helper.${process.env.NEAR_NETWORK || "testnet"}.near.org`,
     explorerUrl: `https://${process.env.NEAR_NETWORK || "testnet"}.nearblocks.io`,
@@ -68,7 +70,11 @@ export class WalletProvider implements Provider {
         const keyPair = KeyPair.fromString(secretKey as KeyPairString);
 
         // Set the key in the keystore
-        await this.keyStore.setKey(PROVIDER_CONFIG.networkId, this.accountId, keyPair);
+        await this.keyStore.setKey(
+            PROVIDER_CONFIG.networkId,
+            this.accountId,
+            keyPair
+        );
 
         const nearConnection = await connect({
             networkId: PROVIDER_CONFIG.networkId,
@@ -99,8 +105,11 @@ export class WalletProvider implements Provider {
                 console.error(`Attempt ${i + 1} failed:`, error);
                 lastError = error as Error;
                 if (i < PROVIDER_CONFIG.MAX_RETRIES - 1) {
-                    await new Promise(resolve =>
-                        setTimeout(resolve, PROVIDER_CONFIG.RETRY_DELAY * Math.pow(2, i))
+                    await new Promise((resolve) =>
+                        setTimeout(
+                            resolve,
+                            PROVIDER_CONFIG.RETRY_DELAY * Math.pow(2, i)
+                        )
                     );
                 }
             }
@@ -108,7 +117,9 @@ export class WalletProvider implements Provider {
         throw lastError!;
     }
 
-    async fetchPortfolioValue(runtime: IAgentRuntime): Promise<WalletPortfolio> {
+    async fetchPortfolioValue(
+        runtime: IAgentRuntime
+    ): Promise<WalletPortfolio> {
         try {
             const cacheKey = `portfolio-${this.accountId}`;
             const cachedValue = this.cache.get<WalletPortfolio>(cacheKey);
@@ -122,7 +133,9 @@ export class WalletProvider implements Provider {
             const balance = await account.getAccountBalance();
 
             // Convert yoctoNEAR to NEAR
-            const nearBalance = utils.format.formatNearAmount(balance.available);
+            const nearBalance = utils.format.formatNearAmount(
+                balance.available
+            );
 
             // Fetch NEAR price in USD
             const nearPrice = await this.fetchNearPrice();
@@ -131,15 +144,17 @@ export class WalletProvider implements Provider {
             const portfolio: WalletPortfolio = {
                 totalUsd: valueUsd.toString(),
                 totalNear: nearBalance,
-                tokens: [{
-                    name: "NEAR Protocol",
-                    symbol: "NEAR",
-                    decimals: 24,
-                    balance: balance.available,
-                    uiAmount: nearBalance,
-                    priceUsd: nearPrice.toString(),
-                    valueUsd: valueUsd.toString(),
-                }]
+                tokens: [
+                    {
+                        name: "NEAR Protocol",
+                        symbol: "NEAR",
+                        decimals: 24,
+                        balance: balance.available,
+                        uiAmount: nearBalance,
+                        priceUsd: nearPrice.toString(),
+                        valueUsd: valueUsd.toString(),
+                    },
+                ],
             };
 
             this.cache.set(cacheKey, portfolio);
@@ -171,7 +186,10 @@ export class WalletProvider implements Provider {
         }
     }
 
-    formatPortfolio(runtime: IAgentRuntime, portfolio: WalletPortfolio): string {
+    formatPortfolio(
+        runtime: IAgentRuntime,
+        portfolio: WalletPortfolio
+    ): string {
         let output = `${runtime.character.system}\n`;
         output += `Account ID: ${this.accountId}\n\n`;
 
@@ -202,7 +220,7 @@ export class WalletProvider implements Provider {
     }
 }
 
-const walletProvider: Provider  = {
+const walletProvider: Provider = {
     get: async (
         runtime: IAgentRuntime,
         _message: Memory,
@@ -221,6 +239,5 @@ const walletProvider: Provider  = {
         }
     },
 };
-
 
 export { walletProvider };

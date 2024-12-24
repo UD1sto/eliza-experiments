@@ -9,7 +9,7 @@ import {
     settings,
     State,
     type Action,
-} from "@ai16z/eliza";
+} from "@elizaos/core";
 import { Connection, PublicKey, VersionedTransaction } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import { getWalletKey } from "../keypairUtils.ts";

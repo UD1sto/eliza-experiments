@@ -1,5 +1,5 @@
 /* This is an example of how WalletProvider can use DeriveKeyProvider to generate a Solana Keypair */
-import { IAgentRuntime, Memory, Provider, State } from "@ai16z/eliza";
+import { IAgentRuntime, Memory, Provider, State } from "@elizaos/core";
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
 import BigNumber from "bignumber.js";
 import NodeCache from "node-cache";
@@ -287,12 +287,14 @@ const walletProvider: Provider = {
 
             let publicKey: PublicKey;
             try {
-                const derivedKeyPair: { keypair: Keypair, attestation: RemoteAttestationQuote } =
-                    await deriveKeyProvider.deriveEd25519Keypair(
-                        "/",
-                        runtime.getSetting("WALLET_SECRET_SALT"),
-                        agentId
-                    );
+                const derivedKeyPair: {
+                    keypair: Keypair;
+                    attestation: RemoteAttestationQuote;
+                } = await deriveKeyProvider.deriveEd25519Keypair(
+                    "/",
+                    runtime.getSetting("WALLET_SECRET_SALT"),
+                    agentId
+                );
                 publicKey = derivedKeyPair.keypair.publicKey;
                 console.log("Wallet Public Key: ", publicKey.toBase58());
             } catch (error) {

@@ -1,4 +1,4 @@
-import { stringToUuid } from "@ai16z/eliza";
+import { stringToUuid } from "@elizaos/core";
 import { BroadcastResult } from "./types";
 
 export function publicationId({

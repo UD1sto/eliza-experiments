@@ -1086,8 +1086,12 @@ export const generateImage = async (
                 num_inference_steps: modelSettings?.steps ?? 50,
                 guidance_scale: data.guidanceScale || 3.5,
                 num_images: data.count,
-                enable_safety_checker: runtime.getSetting("FAL_AI_ENABLE_SAFETY_CHECKER") === "true",
-                safety_tolerance: Number(runtime.getSetting("FAL_AI_SAFETY_TOLERANCE") || "2"),
+                enable_safety_checker:
+                    runtime.getSetting("FAL_AI_ENABLE_SAFETY_CHECKER") ===
+                    "true",
+                safety_tolerance: Number(
+                    runtime.getSetting("FAL_AI_SAFETY_TOLERANCE") || "2"
+                ),
                 output_format: "png" as const,
                 seed: data.seed ?? 6252023,
                 ...(runtime.getSetting("FAL_AI_LORA_PATH")
@@ -1440,6 +1444,7 @@ export async function handleProvider(
         case ModelProviderName.AKASH_CHAT_API:
             return await handleOpenAI(options);
         case ModelProviderName.ANTHROPIC:
+        case ModelProviderName.CLAUDE_VERTEX:
             return await handleAnthropic(options);
         case ModelProviderName.GROK:
             return await handleGrok(options);

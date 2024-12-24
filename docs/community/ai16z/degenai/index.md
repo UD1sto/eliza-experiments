@@ -6,24 +6,21 @@ title: Degen Spartan AI
 
 We can rebuild him
 
-
 ## Trading strategy
 
-- ai16z is the biggest holder of degenai (a pumpfun coin)
-  - Current plan for ai16z still is buybacks of degenai
-    - To-do: We need to surface this better (like a website)
-  - DegenspartanAI also stacks his own coin as well
+- elizaos is the biggest holder of degenai (a pumpfun coin)
+    - Current plan for elizaos still is buybacks of degenai
+        - To-do: We need to surface this better (like a website)
+    - DegenspartanAI also stacks his own coin as well
 - Shitposting while trading
 - He might just dump your shit
 - May do psyops like self fuds his own bags
-
 
 ## Data sources
 
 - partnership with https://defined.fi / https://www.codex.io/
 - Trained on genuine alpha chat groups like `price-talk-trenches`
 - monitoring twitter / discord / telegram chats
-
 
 ## Lore
 

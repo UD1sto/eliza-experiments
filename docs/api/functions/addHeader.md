@@ -1,4 +1,4 @@
-[@ai16z/eliza v0.1.6-alpha.4](../index.md) / addHeader
+[@elizaos/core v0.1.6-alpha.4](../index.md) / addHeader
 
 # Function: addHeader()
 
@@ -39,4 +39,4 @@ const text = addHeader(header, body);
 
 ## Defined in
 
-[packages/core/src/context.ts:69](https://github.com/ai16z/eliza/blob/main/packages/core/src/context.ts#L69)
+[packages/core/src/context.ts:69](https://github.com/elizaos/eliza/blob/main/packages/core/src/context.ts#L69)
