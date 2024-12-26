@@ -534,7 +534,8 @@ export async function createAgent(
             getSecret(character, "FAL_API_KEY") ||
             getSecret(character, "OPENAI_API_KEY") ||
             getSecret(character, "VENICE_API_KEY") ||
-            getSecret(character, "HEURIST_API_KEY")
+            getSecret(character, "HEURIST_API_KEY") ||
+            getSecret(character, "LIVEPEER_GATEWAY_URL")
                 ? imageGenerationPlugin
                 : null,
             getSecret(character, "FAL_API_KEY") ? ThreeDGenerationPlugin : null,
