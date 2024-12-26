@@ -486,6 +486,24 @@ export const models: Models = {
                 "Meta-Llama-3-1-405B-Instruct-FP8",
         },
     },
+
+    [ModelProviderName.LIVEPEER]: {
+        settings: {
+            stop: [],
+            maxInputTokens: 128000,
+            maxOutputTokens: 8192,
+            repetition_penalty: 0.4,
+            temperature: 0.7,
+        },
+        // livepeer endpoint is handled from the sdk
+        model: {
+            [ModelClass.SMALL]: "",
+            [ModelClass.MEDIUM]: "",
+            [ModelClass.LARGE]: "",
+            [ModelClass.EMBEDDING]: "",
+            [ModelClass.IMAGE]: settings.LIVEPEER_IMAGE_MODEL || "ByteDance/SDXL-Lightning",
+        },
+    },
 };
 
 export function getModel(provider: ModelProviderName, type: ModelClass) {
