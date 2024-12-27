@@ -1186,32 +1186,69 @@ export const generateImage = async (
             }
             try {
                 const baseUrl = new URL(apiKey);
-                if (!baseUrl.protocol.startsWith('http')) {
-                    throw new Error("Invalid Livepeer Gateway URL protocol");
+                if (baseUrl.protocol !== 'https:') {
+                    throw new Error("Livepeer Gateway URL must use HTTPS protocol");
                 }
 
-                const response = await fetch(`${baseUrl.toString()}text-to-image`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        model_id: "ByteDance/SDXL-Lightning",
-                        prompt: data.prompt,
-                        width: data.width || 1024,
-                        height: data.height || 1024
-                    })
-                });
+                let result;
+                const MAX_RETRIES = 3;
+                const TIMEOUT_MS = 10000; // 10 second timeout
 
-                const result = await response.json();
+                for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+                    if (attempt > 0) {
+                        await new Promise(resolve => setTimeout(resolve, 3000));
+                    }
+                    console.log("Attempt", attempt + 1, "of", MAX_RETRIES);
 
-                if (!result.images?.length) {
-                    throw new Error("No images generated");
+                    try {
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+                        const response = await fetch(`${baseUrl.toString()}text-to-image`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                model_id: "ByteDance/SDXL-Lightning",
+                                prompt: data.prompt,
+                                width: data.width || 1024,
+                                height: data.height || 1024
+                            }),
+                            signal: controller.signal
+                        });
+
+                        clearTimeout(timeoutId);
+
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const callResult = await response.json();
+
+                        if (callResult.images?.length) {
+                            result = callResult;
+                            break;
+                        }
+                        console.log("No images in response, retrying...");
+
+                    } catch (fetchError) {
+                        console.error(`Attempt ${attempt + 1} failed:`, fetchError);
+                        if (attempt === MAX_RETRIES - 1) {
+                            throw fetchError; // Rethrow on last attempt
+                        }
+                        // Continue to next attempt on other attempts
+                    }
+                }
+
+                if (!result?.images) {
+                    throw new Error("No valid result obtained after all retries");
                 }
 
                 const base64Images = await Promise.all(
                     result.images.map(async (image) => {
-                        const imageUrl = `${apiKey}${image.url}`;
+                        const imageUrl = `${image.url}`;
+                        console.log("imageUrl console log", imageUrl);
                         const imageResponse = await fetch(imageUrl);
                         if (!imageResponse.ok) {
                             throw new Error(
