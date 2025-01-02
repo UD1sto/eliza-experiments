@@ -349,6 +349,11 @@ export function getTokenForProvider(
                 character.settings?.secrets?.GOOGLE_GENERATIVE_AI_API_KEY ||
                 settings.GOOGLE_GENERATIVE_AI_API_KEY
             );
+        case ModelProviderName.LIVEPEER:
+            return (
+                character.settings?.secrets?.LIVEPEER_GATEWAY_URL ||
+                settings.LIVEPEER_GATEWAY_URL
+            );
         default:
             const errorMessage = `Failed to get token - unsupported model provider: ${provider}`;
             elizaLogger.error(errorMessage);
