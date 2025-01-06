@@ -498,6 +498,7 @@ export const models: Models = {
         },
     },
     [ModelProviderName.LIVEPEER]: {
+        endpoint: settings.LIVEPEER_GATEWAY_URL,
         settings: {
             stop: [],
             maxInputTokens: 128000,
@@ -505,12 +506,10 @@ export const models: Models = {
             repetition_penalty: 0.4,
             temperature: 0.7,
         },
-        // livepeer endpoint is handled from the sdk
         model: {
-            [ModelClass.SMALL]: "",
-            [ModelClass.MEDIUM]: "",
-            [ModelClass.LARGE]: "",
-            [ModelClass.EMBEDDING]: "",
+            [ModelClass.SMALL]: settings.SMALL_LIVEPEER_MODEL || "meta-Llama/Meta-Llama-3.1-8B-Instruct",
+            [ModelClass.MEDIUM]: settings.MEDIUM_LIVEPEER_MODEL || "meta-Llama/Meta-Llama-3.1-8B-Instruct",
+            [ModelClass.LARGE]: settings.LARGE_LIVEPEER_MODEL || "meta-Llama/Meta-Llama-3.1-8B-Instruct",
             [ModelClass.IMAGE]: settings.LIVEPEER_IMAGE_MODEL || "ByteDance/SDXL-Lightning",
         },
     },
