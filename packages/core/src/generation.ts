@@ -316,7 +316,8 @@ export async function generateText({
             case ModelProviderName.NANOGPT:
             case ModelProviderName.HYPERBOLIC:
             case ModelProviderName.TOGETHER:
-            case ModelProviderName.AKASH_CHAT_API: {
+            case ModelProviderName.AKASH_CHAT_API:
+            case ModelProviderName.LIVEPEER: {
                 elizaLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({
                     apiKey,
@@ -769,37 +770,27 @@ export async function generateText({
                 break;
             }
 
-            case ModelProviderName.VENICE: {
-                elizaLogger.debug("Initializing Venice model.");
-                const venice = createOpenAI({
+
+            //uncomment when new logic is ready
+            case ModelProviderName.LIVEPEER: {
+                elizaLogger.debug("Initializing Livepeer model.");
+                const livepeer = createOpenAI({
                     apiKey: apiKey,
                     baseURL: endpoint,
                 });
 
-                const { text: veniceResponse } = await aiGenerateText({
-                    model: venice.languageModel(model),
+                const { text: livepeerResponse } = await aiGenerateText({
+                    model: livepeer.languageModel(model),
                     prompt: context,
-                    system:
-                        runtime.character.system ??
-                        settings.SYSTEM_PROMPT ??
-                        undefined,
-                    tools: tools,
-                    onStepFinish: onStepFinish,
                     temperature: temperature,
                     maxSteps: maxSteps,
                     maxTokens: max_response_length,
                 });
 
-                response = veniceResponse;
-                elizaLogger.debug("Received response from Venice model.");
-                break;
+                response = livepeerResponse;
             }
 
-            default: {
-                const errorMessage = `Unsupported provider: ${provider}`;
-                elizaLogger.error(errorMessage);
-                throw new Error(errorMessage);
-            }
+
         }
 
         return response;
@@ -1642,6 +1633,7 @@ export async function handleProvider(
         case ModelProviderName.TOGETHER:
         case ModelProviderName.NANOGPT:
         case ModelProviderName.AKASH_CHAT_API:
+        case ModelProviderName.LIVEPEER:
             return await handleOpenAI(options);
         case ModelProviderName.ANTHROPIC:
         case ModelProviderName.CLAUDE_VERTEX:
@@ -1863,6 +1855,7 @@ async function handleOpenRouter({
  * @param {ProviderOptions} options - Options specific to Ollama.
  * @returns {Promise<GenerateObjectResult<unknown>>} - A promise that resolves to generated objects.
  */
+
 async function handleOllama({
     model,
     schema,
