@@ -317,7 +317,7 @@ export async function generateText({
             case ModelProviderName.HYPERBOLIC:
             case ModelProviderName.TOGETHER:
             case ModelProviderName.AKASH_CHAT_API:
-            case ModelProviderName.LIVEPEER: {
+                 {
                 elizaLogger.debug("Initializing OpenAI model.");
                 const openai = createOpenAI({
                     apiKey,
@@ -770,27 +770,87 @@ export async function generateText({
                 break;
             }
 
-
-            //uncomment when new logic is ready
             case ModelProviderName.LIVEPEER: {
                 elizaLogger.debug("Initializing Livepeer model.");
-                const livepeer = createOpenAI({
-                    apiKey: apiKey,
-                    baseURL: endpoint,
+
+                if (!endpoint) {
+                    throw new Error("Livepeer Gateway URL is not defined");
+                }
+
+                // Format the request body to exactly match the working curl command
+                const requestBody = {
+                    model: "meta-llama/Meta-Llama-3.1-8B-Instruct", // Hardcode the model name to match working curl
+                    messages: [
+                        {
+                            role: "system",
+                            content: runtime.character.system ?? settings.SYSTEM_PROMPT ?? "You are a helpful assistant"
+                        },
+                        {
+                            role: "user",
+                            content: context
+                        }
+                    ],
+                    max_tokens: max_response_length,
+                    stream: false // Keep stream false as in curl
+                };
+
+                // Remove temperature since it's not in working curl
+
+                console.log("Livepeer request:", {
+                    url: endpoint,
+                    body: requestBody
                 });
 
-                const { text: livepeerResponse } = await aiGenerateText({
-                    model: livepeer.languageModel(model),
-                    prompt: context,
-                    temperature: temperature,
-                    maxSteps: maxSteps,
-                    maxTokens: max_response_length,
-                });
+                try {
+                    // Add -N and --no-buffer equivalent options
+                    const controller = new AbortController();
+                    const signal = controller.signal;
 
-                response = livepeerResponse;
+                    const fetchResponse = await runtime.fetch(endpoint, {
+                        method: "POST",
+                        headers: {
+                            "accept": "text/event-stream",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(requestBody),
+                        signal, // Add signal for no buffering
+                        keepalive: true // Similar to -N in curl
+                    });
+
+                    console.log("Livepeer response status:", fetchResponse.status, fetchResponse.statusText);
+
+                    if (!fetchResponse.ok) {
+                        const errorText = await fetchResponse.text();
+                        throw new Error(
+                            `Livepeer request failed (${fetchResponse.status}): ${errorText}`
+                        );
+                    }
+                    const json = await fetchResponse.json();
+                    console.log("Livepeer response:", json);
+
+                    if (
+                        !json ||
+                        !json.choices ||
+                        !json.choices[0] ||
+                        !json.choices[0].delta ||
+                        !json.choices[0].delta.content
+                    ) {
+                        throw new Error("Invalid response format from Livepeer");
+                    }
+
+                    // Just return the content as a string since generateText should return a string
+                    response = json.choices[0].delta.content;
+
+                    // Log the actual content to debug
+                    elizaLogger.debug("Livepeer response content:", response);
+                    elizaLogger.debug("Successfully received response from Livepeer model");
+                } catch (err) {
+                    elizaLogger.error("Error in Livepeer request:", err);
+                    throw err;
+                }
+
+                break;
             }
-
-
         }
 
         return response;
@@ -1624,6 +1684,23 @@ export async function handleProvider(
     options: ProviderOptions
 ): Promise<GenerateObjectResult<unknown>> {
     const { provider, runtime, context, modelClass } = options;
+
+    console.log("Provider debug info:", {
+        provider,
+        modelClass,
+        hasApiKey: !!options.apiKey,
+        modelOptions: {
+            ...options.modelOptions,
+            // Don't log sensitive data
+            apiKey: undefined
+        }
+    });
+
+    if (provider === ModelProviderName.LIVEPEER && !options.apiKey) {
+        console.error("Livepeer provider error: Missing LIVEPEER_GATEWAY_URL");
+        throw new Error("Livepeer provider requires LIVEPEER_GATEWAY_URL to be configured");
+    }
+
     switch (provider) {
         case ModelProviderName.OPENAI:
         case ModelProviderName.ETERNALAI:
@@ -1633,7 +1710,6 @@ export async function handleProvider(
         case ModelProviderName.TOGETHER:
         case ModelProviderName.NANOGPT:
         case ModelProviderName.AKASH_CHAT_API:
-        case ModelProviderName.LIVEPEER:
             return await handleOpenAI(options);
         case ModelProviderName.ANTHROPIC:
         case ModelProviderName.CLAUDE_VERTEX:
@@ -1656,6 +1732,8 @@ export async function handleProvider(
             return await handleOpenRouter(options);
         case ModelProviderName.OLLAMA:
             return await handleOllama(options);
+        case ModelProviderName.LIVEPEER:
+            return await handleLivepeer(options);
         default: {
             const errorMessage = `Unsupported provider: ${provider}`;
             elizaLogger.error(errorMessage);
@@ -1878,6 +1956,41 @@ async function handleOllama({
         ...modelOptions,
     });
 }
+/**
+ * Handles object generation for Livepeer models.
+ *
+ * @param {ProviderOptions} options - Options specific to Livepeer.
+ * @returns {Promise<GenerateObjectResult<unknown>>} - A promise that resolves to generated objects.
+ */
+async function handleLivepeer({
+    model,
+    apiKey,
+    schema,
+    schemaName,
+    schemaDescription,
+    mode,
+    modelOptions,
+}: ProviderOptions): Promise<GenerateObjectResult<unknown>> {
+    console.log("Livepeer provider api key:", apiKey);
+    if (!apiKey) {
+        throw new Error("Livepeer provider requires LIVEPEER_GATEWAY_URL to be configured");
+    }
+
+    const livepeerClient = createOpenAI({
+        apiKey,
+        baseURL: apiKey // Use the apiKey as the baseURL since it contains the gateway URL
+    });
+
+    return await aiGenerateObject({
+        model: livepeerClient.languageModel(model),
+        schema,
+        schemaName,
+        schemaDescription,
+        mode,
+        ...modelOptions,
+    });
+}
+
 
 // Add type definition for Together AI response
 interface TogetherAIImageResponse {
