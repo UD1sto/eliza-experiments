@@ -806,7 +806,7 @@ export async function generateText({
                     const controller = new AbortController();
                     const signal = controller.signal;
 
-                    const fetchResponse = await runtime.fetch(endpoint, {
+                    const fetchResponse = await runtime.fetch(endpoint+'/llm', {
                         method: "POST",
                         headers: {
                             "accept": "text/event-stream",
