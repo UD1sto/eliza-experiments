@@ -797,7 +797,7 @@ export async function generateText({
                 // Remove temperature since it's not in working curl
 
                 console.log("Livepeer request:", {
-                    url: endpoint,
+                    url: endpoint + "/llm",
                     body: requestBody
                 });
 
