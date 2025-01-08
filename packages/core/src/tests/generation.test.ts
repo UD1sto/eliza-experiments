@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach } from "vitest";
-import { ModelProviderName, IAgentRuntime } from "../types";
+import { ModelProviderName, IAgentRuntime, ModelClass } from "../types";
 import { models } from "../models";
 import {
     generateText,
@@ -176,6 +176,111 @@ describe("Generation", () => {
             const result = await trimTokens(multilineText, 5, mockRuntime);
             expect(result.length).toBeGreaterThan(0);
             expect(result.length).toBeLessThan(multilineText.length);
+        });
+    });
+});
+
+describe("Livepeer Provider Generation", () => {
+    let mockLivepeerRuntime: IAgentRuntime;
+
+    beforeEach(() => {
+        mockLivepeerRuntime = {
+            modelProvider: ModelProviderName.LIVEPEER,
+            token: "mock-livepeer-token",
+            character: {
+                modelEndpointOverride: undefined,
+            },
+            getSetting: vi.fn().mockImplementation((key: string) => {
+                if (key === "LIVEPEER_GATEWAY_URL") return "http://gateway.livepeer-eliza.com:8941";
+                if (key === "LIVEPEER_IMAGE_MODEL") return "ByteDance/SDXL-Lightning";
+                return undefined;
+            }),
+        } as unknown as IAgentRuntime;
+
+        vi.clearAllMocks();
+    });
+
+    describe("Text Generation", () => {
+        it("should use correct model for text generation", async () => {
+            const result = await generateText({
+                runtime: mockLivepeerRuntime,
+                context: "test context",
+                modelClass: ModelClass.SMALL,
+            });
+            expect(result).toBe("mocked response");
+            expect(models[ModelProviderName.LIVEPEER].model[ModelClass.SMALL])
+                .toBe("meta-llama/Meta-Llama-3.1-8B-Instruct");
+        });
+
+        it("should use correct settings for text generation", () => {
+            const settings = models[ModelProviderName.LIVEPEER].settings;
+            expect(settings.maxInputTokens).toBe(128000);
+            expect(settings.maxOutputTokens).toBe(8192);
+            expect(settings.repetition_penalty).toBe(0.4);
+            expect(settings.temperature).toBe(0.7);
+        });
+
+        it("should handle empty context with Livepeer provider", async () => {
+            const result = await generateText({
+                runtime: mockLivepeerRuntime,
+                context: "",
+                modelClass: ModelClass.SMALL,
+            });
+            expect(result).toBe("");
+        });
+    });
+
+    describe("Image Generation", () => {
+        it("should use correct model for image generation", () => {
+            const imageModel = models[ModelProviderName.LIVEPEER].model[ModelClass.IMAGE];
+            expect(imageModel).toBe("ByteDance/SDXL-Lightning");
+        });
+
+        it("should use custom image model when specified", () => {
+            mockLivepeerRuntime.getSetting = vi.fn().mockImplementation((key: string) => {
+                if (key === "LIVEPEER_IMAGE_MODEL") return "CustomModel/SDXL";
+                return undefined;
+            });
+            const imageModel = mockLivepeerRuntime.getSetting("LIVEPEER_IMAGE_MODEL");
+            expect(imageModel).toBe("CustomModel/SDXL");
+        });
+
+        it("should use correct endpoint for image generation", () => {
+            const endpoint = models[ModelProviderName.LIVEPEER].endpoint;
+            expect(endpoint).toBe("http://gateway.livepeer-eliza.com:8941");
+        });
+    });
+
+    describe("Token Management", () => {
+        it("should handle token trimming with Livepeer models", async () => {
+            const longText = "This is a very long text that needs to be trimmed according to Livepeer's token limits";
+            const result = await trimTokens(longText, 5, mockLivepeerRuntime);
+            expect(result.length).toBeLessThan(longText.length);
+            expect(result.length).toBeGreaterThan(0);
+        });
+
+        it("should respect Livepeer's max token limits", () => {
+            const settings = models[ModelProviderName.LIVEPEER].settings;
+            expect(settings.maxInputTokens).toBeLessThanOrEqual(128000);
+            expect(settings.maxOutputTokens).toBeLessThanOrEqual(8192);
+        });
+    });
+
+    describe("Error Handling", () => {
+        it("should handle invalid model class gracefully", async () => {
+            await expect(generateText({
+                runtime: mockLivepeerRuntime,
+                context: "test",
+                modelClass: "invalid-model" as any,
+            })).resolves.toBeDefined();
+        });
+
+        it("should handle missing endpoint configuration", () => {
+            mockLivepeerRuntime.getSetting = vi.fn().mockReturnValue(undefined);
+            const endpoint = mockLivepeerRuntime.getSetting("LIVEPEER_GATEWAY_URL");
+            expect(endpoint).toBeUndefined();
+            expect(models[ModelProviderName.LIVEPEER].endpoint)
+                .toBe("http://gateway.livepeer-eliza.com:8941");
         });
     });
 });

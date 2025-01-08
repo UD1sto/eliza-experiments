@@ -507,9 +507,9 @@ export const models: Models = {
             temperature: 0.7,
         },
         model: {
-            [ModelClass.SMALL]: settings.SMALL_LIVEPEER_MODEL || "meta-Llama/Meta-Llama-3.1-8B-Instruct",
-            [ModelClass.MEDIUM]: settings.MEDIUM_LIVEPEER_MODEL || "meta-Llama/Meta-Llama-3.1-8B-Instruct",
-            [ModelClass.LARGE]: settings.LARGE_LIVEPEER_MODEL || "meta-Llama/Meta-Llama-3.1-8B-Instruct",
+            [ModelClass.SMALL]: settings.SMALL_LIVEPEER_MODEL || "meta-llama/Meta-Llama-3.1-8B-Instruct",
+            [ModelClass.MEDIUM]: settings.MEDIUM_LIVEPEER_MODEL || "meta-llama/Meta-Llama-3.1-8B-Instruct",
+            [ModelClass.LARGE]: settings.LARGE_LIVEPEER_MODEL || "meta-llama/Meta-Llama-3.1-8B-Instruct",
             [ModelClass.IMAGE]: settings.LIVEPEER_IMAGE_MODEL || "ByteDance/SDXL-Lightning",
         },
     },

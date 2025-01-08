@@ -15,6 +15,8 @@ describe('Environment Configuration', () => {
             OPENROUTER_API_KEY: 'test-key',
             GOOGLE_GENERATIVE_AI_API_KEY: 'test-key',
             ELEVENLABS_XI_API_KEY: 'test-key',
+            LIVEPEER_GATEWAY_URL: 'http://gateway.livepeer-eliza.com:8941',
+            LIVEPEER_IMAGE_MODEL: 'ByteDance/SDXL-Lightning',
         };
     });
 
@@ -51,6 +53,22 @@ describe('Environment Configuration', () => {
             'GROK_API_KEY: Required\n' +
             'OPENROUTER_API_KEY: Required'
         );
+    });
+
+    describe('Livepeer Configuration', () => {
+        it('should validate correct Livepeer configuration', () => {
+            expect(() => validateEnv()).not.toThrow();
+        });
+
+        it('should use default Livepeer gateway URL if not provided', () => {
+            delete process.env.LIVEPEER_GATEWAY_URL;
+            expect(() => validateEnv()).not.toThrow();
+        });
+
+        it('should use default Livepeer image model if not provided', () => {
+            delete process.env.LIVEPEER_IMAGE_MODEL;
+            expect(() => validateEnv()).not.toThrow();
+        });
     });
 });
 
