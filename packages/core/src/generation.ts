@@ -779,7 +779,7 @@ export async function generateText({
 
                 // Format the request body to exactly match the working curl command
                 const requestBody = {
-                    model: "meta-llama/Meta-Llama-3.1-8B-Instruct", // Hardcode the model name to match working curl
+                    model: model, // Use the model parameter passed in
                     messages: [
                         {
                             role: "system",
