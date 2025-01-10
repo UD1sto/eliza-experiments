@@ -28,6 +28,8 @@ tweets/
 *.mp3
 
 logs/
+output/
+
 
 test-report.json
 content_cache/
