@@ -19,9 +19,14 @@ const totalRequests: number = Number(process.argv[2]) || Number(process.env.TOTA
 const outputDir: string = 'output/llm_gen';
 const logFile: string = path.join(outputDir, `stress_test_results_${new Date().toISOString().replace(/[:.]/g, '-')}.log`);
 
+// Retry configuration
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000; // 1 second
+
 interface RequestResult {
   success: boolean;
   duration: number;
+  retries?: number;
 }
 
 interface RequestPayload {
@@ -47,61 +52,78 @@ function readPrompt(): string {
 }
 
 /**
+ * Sleep helper function
+ */
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
  * A helper function to perform a single request and log timing data
  */
 async function makeRequest(url: string, payload: RequestPayload, requestNum: number): Promise<RequestResult> {
+  let retries = 0;
   const startTime: number = Date.now();
   const startTimeStr: string = new Date(startTime).toISOString();
 
-  console.log(`\n[Request ${requestNum}] Starting request to ${url}`);
-  console.log(`[Request ${requestNum}] Payload:`, JSON.stringify(payload, null, 2));
+  while (retries <= MAX_RETRIES) {
+    console.log(`\n[Request ${requestNum}] Starting request to ${url}${retries > 0 ? ` (Retry ${retries}/${MAX_RETRIES})` : ''}`);
+    console.log(`[Request ${requestNum}] Payload:`, JSON.stringify(payload, null, 2));
 
-  try {
-    const response: AxiosResponse = await axios({
-      method: 'post',
-      url: url,
-      headers: {
-        'accept': 'text/event-stream',
-        'Content-Type': 'application/json'
-      },
-      data: payload,
-      timeout: 300000
-    });
+    try {
+      const response: AxiosResponse = await axios({
+        method: 'post',
+        url: url,
+        headers: {
+          'accept': 'text/event-stream',
+          'Content-Type': 'application/json'
+        },
+        data: payload,
+        timeout: 300000
+      });
 
-    console.log(`[Request ${requestNum}] Response status: ${response.status}`);
-    console.log(`[Request ${requestNum}] Response data:`, JSON.stringify(response.data, null, 2));
+      console.log(`[Request ${requestNum}] Response status: ${response.status}`);
+      console.log(`[Request ${requestNum}] Response data:`, JSON.stringify(response.data, null, 2));
 
-    // Add a small delay between requests to prevent overwhelming the server
-    await new Promise(resolve => setTimeout(resolve, 1000));
+      // Add a small delay between requests to prevent overwhelming the server
+      await sleep(1000);
 
-    const endTime: number = Date.now();
-    const endTimeStr: string = new Date(endTime).toISOString();
-    const duration: number = endTime - startTime;
+      const endTime: number = Date.now();
+      const endTimeStr: string = new Date(endTime).toISOString();
+      const duration: number = endTime - startTime;
 
-    const logEntry: string = `Request ${requestNum}: Start=${startTimeStr}, End=${endTimeStr}, Duration=${duration}ms\n`;
-    fs.appendFileSync(logFile, logEntry);
+      const logEntry: string = `Request ${requestNum}${retries > 0 ? ` (After ${retries} retries)` : ''}: Start=${startTimeStr}, End=${endTimeStr}, Duration=${duration}ms\n`;
+      fs.appendFileSync(logFile, logEntry);
 
-    return { success: true, duration };
-  } catch (error: any) {
-    console.error(`[Request ${requestNum}] Failed with error:`, {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
-      code: error.code,
-      url: url,
-      payload: payload
-    });
+      return { success: true, duration, retries };
 
-    const endTime: number = Date.now();
-    const endTimeStr: string = new Date(endTime).toISOString();
-    const duration: number = endTime - startTime;
+    } catch (error: any) {
+      const endTime: number = Date.now();
+      const endTimeStr: string = new Date(endTime).toISOString();
+      const duration: number = endTime - startTime;
 
-    const logEntry: string = `Request ${requestNum} (FAILED): Start=${startTimeStr}, End=${endTimeStr}, Duration=${duration}ms, Error=${error.message}\n`;
-    fs.appendFileSync(logFile, logEntry);
+      console.error(`[Request ${requestNum}] Failed with error:`, {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        code: error.code,
+        url: url,
+        payload: payload,
+        retry: retries
+      });
 
-    return { success: false, duration };
+      if (retries === MAX_RETRIES) {
+        const logEntry: string = `Request ${requestNum} (FAILED after ${retries} retries): Start=${startTimeStr}, End=${endTimeStr}, Duration=${duration}ms, Error=${error.message}\n`;
+        fs.appendFileSync(logFile, logEntry);
+        return { success: false, duration, retries };
+      }
+
+      retries++;
+      console.log(`[Request ${requestNum}] Retrying in ${RETRY_DELAY}ms... (${retries}/${MAX_RETRIES})`);
+      await sleep(RETRY_DELAY);
+    }
   }
+
+  return { success: false, duration: Date.now() - startTime, retries };
 }
 
 /**
@@ -162,6 +184,7 @@ async function main(): Promise<void> {
   const failureCount: number = results.filter(r => !r.success).length;
   const durations: number[] = results.map(r => r.duration);
   const avgDuration: number = durations.reduce((acc, cur) => acc + cur, 0) / durations.length;
+  const totalRetries: number = results.reduce((acc, r) => acc + (r.retries || 0), 0);
 
   // Log final results
   const summary: string = `
@@ -169,6 +192,7 @@ async function main(): Promise<void> {
 Total Requests: ${totalRequests}
 Successes: ${successCount}
 Failures: ${failureCount}
+Total Retries: ${totalRetries}
 Average Response Time: ${avgDuration.toFixed(2)}ms
 `;
 
