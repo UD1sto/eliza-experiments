@@ -7,9 +7,15 @@
 
 import axios, { AxiosResponse } from 'axios';
 import fs from 'fs';
+import path from 'path';
+
+// Save initial prompt tokens to track usage
+const SYSTEM_PROMPT_TOKENS = 32; // Estimated tokens for system prompt
+const USER_PROMPT_TOKENS = 1024; // Estimated tokens for user prompt
+const TOTAL_PROMPT_TOKENS = SYSTEM_PROMPT_TOKENS + USER_PROMPT_TOKENS;
 
 const totalRequests: number = Number(process.env.TOTAL_REQUESTS) || 50;
-const logFile: string = 'stress_test_results.log';
+const logFile: string = `stress_test_results_${new Date().toISOString().replace(/[:.]/g, '-')}.log`;
 
 interface RequestResult {
   success: boolean;
@@ -90,6 +96,7 @@ async function makeRequest(url: string, payload: RequestPayload, requestNum: num
 async function main(): Promise<void> {
   // Clear previous log file
   fs.writeFileSync(logFile, '--- New Stress Test Run ---\n');
+  fs.appendFileSync(logFile, `Initial prompt tokens: ${TOTAL_PROMPT_TOKENS}\n`);
 
   // Get gateway URL from environment variable
   const gatewayUrl: string | undefined = process.env.LIVEPEER_GATEWAY_URL;
@@ -97,6 +104,9 @@ async function main(): Promise<void> {
     console.error('LIVEPEER_GATEWAY_URL environment variable not set');
     process.exit(1);
   }
+
+  // Read the content from this.txt
+  const thisContent = fs.readFileSync(path.join(__dirname, 'this.txt'), 'utf-8');
 
   const url: string = `${gatewayUrl}/llm`;
   const payload: RequestPayload = {
@@ -108,7 +118,7 @@ async function main(): Promise<void> {
       },
       {
         role: "user",
-        content: "Hello, how are you?"
+        content: thisContent
       }
     ],
     max_tokens: 1000,
