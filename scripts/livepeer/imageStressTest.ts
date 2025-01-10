@@ -13,10 +13,11 @@ import path from 'path';
 // Get total requests from command line arg, environment variable, or default
 const totalRequests: number = Number(process.argv[2]) || Number(process.env.TOTAL_REQUESTS) || 2;
 const maxRetries: number = 3;
-const testRunDir: string = `output/image_stress_test_results_${new Date().toISOString().replace(/[:.]/g, '-')}`;
+const outputDir: string = 'output/img_gen';
+const testRunDir: string = path.join(outputDir, `image_stress_test_results_${new Date().toISOString().replace(/[:.]/g, '-')}`);
 const logFile: string = path.join(testRunDir, 'test_results.log');
 const imageDir: string = path.join(testRunDir, 'images');
-const retryDelayMs: number = Number(process.env.RETRY_DELAY_MS) || 2000; // Default 1 second between retries
+const retryDelayMs: number = Number(process.env.RETRY_DELAY_MS) || 2000; // Default 2 seconds between retries
 
 interface RequestResult {
   success: boolean;
@@ -29,6 +30,18 @@ interface RequestPayload {
   prompt: string;
   width: number;
   height: number;
+}
+
+/**
+ * Function to read the prompt from the prompts file
+ */
+function readPrompt(): string {
+  const promptsContent = fs.readFileSync(path.join(__dirname, 'prompts'), 'utf-8');
+  const imgPromptMatch = promptsContent.match(/img_prompt=(.*?)$/s);
+  if (!imgPromptMatch) {
+    throw new Error('Could not find img_prompt in prompts file');
+  }
+  return imgPromptMatch[1].trim();
 }
 
 /**
@@ -141,6 +154,7 @@ async function makeRequest(url: string, payload: RequestPayload, requestNum: num
  */
 async function main(): Promise<void> {
   // Create test run directory and subdirectories
+  fs.mkdirSync(outputDir, { recursive: true });
   fs.mkdirSync(testRunDir, { recursive: true });
   fs.mkdirSync(imageDir, { recursive: true });
 
@@ -155,9 +169,10 @@ async function main(): Promise<void> {
   }
 
   const url: string = `${gatewayUrl}/text-to-image`;
+  const prompt = readPrompt();
   const payload: RequestPayload = {
     model_id: "ByteDance/SDXL-Lightning",
-    prompt: "A beautiful sunset over a mountain landscape",
+    prompt: prompt,
     width: 1024,
     height: 1024
   };

@@ -14,8 +14,10 @@ const SYSTEM_PROMPT_TOKENS = 32; // Estimated tokens for system prompt
 const USER_PROMPT_TOKENS = 1024; // Estimated tokens for user prompt
 const TOTAL_PROMPT_TOKENS = SYSTEM_PROMPT_TOKENS + USER_PROMPT_TOKENS;
 
-const totalRequests: number = Number(process.env.TOTAL_REQUESTS) || 50;
-const logFile: string = `stress_test_results_${new Date().toISOString().replace(/[:.]/g, '-')}.log`;
+// Get total requests from command line arg, environment variable, or default
+const totalRequests: number = Number(process.argv[2]) || Number(process.env.TOTAL_REQUESTS) || 50;
+const outputDir: string = 'output/llm_gen';
+const logFile: string = path.join(outputDir, `stress_test_results_${new Date().toISOString().replace(/[:.]/g, '-')}.log`);
 
 interface RequestResult {
   success: boolean;
@@ -30,6 +32,18 @@ interface RequestPayload {
   }[];
   max_tokens: number;
   stream: boolean;
+}
+
+/**
+ * Function to read the prompt from the prompts file
+ */
+function readPrompt(): string {
+  const promptsContent = fs.readFileSync(path.join(__dirname, 'prompts'), 'utf-8');
+  const llmPromptMatch = promptsContent.match(/llm_prompt=(.*?)(?=\n\s*img_prompt|$)/s);
+  if (!llmPromptMatch) {
+    throw new Error('Could not find llm_prompt in prompts file');
+  }
+  return llmPromptMatch[1].trim();
 }
 
 /**
@@ -94,6 +108,9 @@ async function makeRequest(url: string, payload: RequestPayload, requestNum: num
  * The main function orchestrates running the stress test.
  */
 async function main(): Promise<void> {
+  // Create output directory if it doesn't exist
+  fs.mkdirSync(outputDir, { recursive: true });
+
   // Clear previous log file
   fs.writeFileSync(logFile, '--- New Stress Test Run ---\n');
   fs.appendFileSync(logFile, `Initial prompt tokens: ${TOTAL_PROMPT_TOKENS}\n`);
@@ -105,8 +122,8 @@ async function main(): Promise<void> {
     process.exit(1);
   }
 
-  // Read the content from this.txt
-  const thisContent = fs.readFileSync(path.join(__dirname, 'this.txt'), 'utf-8');
+  // Read the prompt from the prompts file
+  const prompt = readPrompt();
 
   const url: string = `${gatewayUrl}/llm`;
   const payload: RequestPayload = {
@@ -118,7 +135,7 @@ async function main(): Promise<void> {
       },
       {
         role: "user",
-        content: thisContent
+        content: prompt
       }
     ],
     max_tokens: 1000,
