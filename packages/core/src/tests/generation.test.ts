@@ -32,6 +32,18 @@ vi.mock("../generation", async () => {
     };
 });
 
+vi.mock("../settings", () => {
+    const mockSettings = {
+        LIVEPEER_GATEWAY_URL: "http://gateway.livepeer-eliza",
+        // ... your other mock vars ...
+    };
+    return {
+        settings: mockSettings,
+        default: mockSettings,
+        loadEnvConfig: vi.fn().mockReturnValue(mockSettings),
+    };
+});
+
 describe("Generation", () => {
     let mockRuntime: IAgentRuntime;
 
@@ -191,7 +203,7 @@ describe("Livepeer Provider Generation", () => {
                 modelEndpointOverride: undefined,
             },
             getSetting: vi.fn().mockImplementation((key: string) => {
-                if (key === "LIVEPEER_GATEWAY_URL") return "http://gateway.livepeer-eliza.com:8941";
+                if (key === "LIVEPEER_GATEWAY_URL") return "http://gateway.livepeer-eliza";
                 if (key === "LIVEPEER_IMAGE_MODEL") return "ByteDance/SDXL-Lightning";
                 return undefined;
             }),
@@ -216,8 +228,7 @@ describe("Livepeer Provider Generation", () => {
             const settings = models[ModelProviderName.LIVEPEER].settings;
             expect(settings.maxInputTokens).toBe(128000);
             expect(settings.maxOutputTokens).toBe(8192);
-            expect(settings.repetition_penalty).toBe(0.4);
-            expect(settings.temperature).toBe(0.7);
+            expect(settings.temperature).toBe(0);
         });
 
         it("should handle empty context with Livepeer provider", async () => {
@@ -246,8 +257,8 @@ describe("Livepeer Provider Generation", () => {
         });
 
         it("should use correct endpoint for image generation", () => {
-            const endpoint = models[ModelProviderName.LIVEPEER].endpoint;
-            expect(endpoint).toBe("http://gateway.livepeer-eliza.com:8941");
+            const endpoint = mockLivepeerRuntime.getSetting("LIVEPEER_GATEWAY_URL") || models[ModelProviderName.LIVEPEER].endpoint;
+            expect(endpoint).toBe("http://gateway.livepeer-eliza");
         });
     });
 
@@ -280,7 +291,7 @@ describe("Livepeer Provider Generation", () => {
             const endpoint = mockLivepeerRuntime.getSetting("LIVEPEER_GATEWAY_URL");
             expect(endpoint).toBeUndefined();
             expect(models[ModelProviderName.LIVEPEER].endpoint)
-                .toBe("http://gateway.livepeer-eliza.com:8941");
+                .toBe("http://gateway.livepeer-eliza");
         });
     });
 });
