@@ -801,52 +801,71 @@ export async function generateText({
                     body: requestBody
                 });
 
-                try {
-                    // Add -N and --no-buffer equivalent options
-                    const controller = new AbortController();
-                    const signal = controller.signal;
+                let attempts = 0;
+                const maxAttempts = 3;
+                const retryDelay = 1000; // 1 second
 
-                    const fetchResponse = await runtime.fetch(endpoint+'/llm', {
-                        method: "POST",
-                        headers: {
-                            "accept": "text/event-stream",
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(requestBody),
-                        signal, // Add signal for no buffering
-                        keepalive: true // Similar to -N in curl
-                    });
+                while (attempts < maxAttempts) {
+                    try {
+                        // Add -N and --no-buffer equivalent options
+                        const controller = new AbortController();
+                        const signal = controller.signal;
 
-                    elizaLogger.log("Livepeer response status:", fetchResponse.status, fetchResponse.statusText);
+                        const fetchResponse = await runtime.fetch(endpoint+'/llm', {
+                            method: "POST",
+                            headers: {
+                                "accept": "text/event-stream",
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(requestBody),
+                            signal, // Add signal for no buffering
+                            keepalive: true // Similar to -N in curl
+                        });
 
-                    if (!fetchResponse.ok) {
-                        const errorText = await fetchResponse.text();
-                        throw new Error(
-                            `Livepeer request failed (${fetchResponse.status}): ${errorText}`
-                        );
+                        elizaLogger.log("Livepeer response status:", fetchResponse.status, fetchResponse.statusText);
+
+                        if (!fetchResponse.ok) {
+                            const errorText = await fetchResponse.text();
+                            throw new Error(
+                                `Livepeer request failed (${fetchResponse.status}): ${errorText}`
+                            );
+                        }
+                        const json = await fetchResponse.json();
+                        elizaLogger.log("Livepeer response:", json);
+
+                        if (
+                            !json ||
+                            !json.choices ||
+                            !json.choices[0] ||
+                            !json.choices[0].delta ||
+                            !json.choices[0].delta.content
+                        ) {
+                            throw new Error("Invalid response format from Livepeer");
+                        }
+
+                        // Just return the content as a string since generateText should return a string
+                        response = json.choices[0].delta.content;
+
+                        // Log the actual content to debug
+                        elizaLogger.debug("Livepeer response content:", response);
+                        elizaLogger.debug("Successfully received response from Livepeer model");
+
+                        // If we get here, the request was successful, so break the retry loop
+                        break;
+
+                    } catch (err) {
+                        attempts++;
+                        elizaLogger.error(`Livepeer request attempt ${attempts} failed:`, err);
+
+                        if (attempts === maxAttempts) {
+                            // If we've exhausted all attempts, rethrow the error
+                            throw err;
+                        }
+
+                        // Wait before retrying
+                        await new Promise(resolve => setTimeout(resolve, retryDelay));
+                        elizaLogger.debug(`Retrying Livepeer request, attempt ${attempts + 1} of ${maxAttempts}`);
                     }
-                    const json = await fetchResponse.json();
-                    elizaLogger.log("Livepeer response:", json);
-
-                    if (
-                        !json ||
-                        !json.choices ||
-                        !json.choices[0] ||
-                        !json.choices[0].delta ||
-                        !json.choices[0].delta.content
-                    ) {
-                        throw new Error("Invalid response format from Livepeer");
-                    }
-
-                    // Just return the content as a string since generateText should return a string
-                    response = json.choices[0].delta.content;
-
-                    // Log the actual content to debug
-                    elizaLogger.debug("Livepeer response content:", response);
-                    elizaLogger.debug("Successfully received response from Livepeer model");
-                } catch (err) {
-                    elizaLogger.error("Error in Livepeer request:", err);
-                    throw err;
                 }
 
                 break;
@@ -1430,52 +1449,66 @@ export const generateImage = async (
                 if (!baseUrl.protocol.startsWith("http")) {
                     throw new Error("Invalid Livepeer Gateway URL protocol");
                 }
-                const response = await fetch(
-                    `${baseUrl.toString()}text-to-image`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            model_id:
-                                data.modelId || "ByteDance/SDXL-Lightning",
-                            prompt: data.prompt,
-                            width: data.width || 1024,
-                            height: data.height || 1024,
-                        }),
+
+                let lastError;
+                for (let attempt = 1; attempt <= 3; attempt++) {
+                    try {
+                        const response = await fetch(
+                            `${baseUrl.toString()}text-to-image`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                    model_id:
+                                        data.modelId || "ByteDance/SDXL-Lightning",
+                                    prompt: data.prompt,
+                                    width: data.width || 1024,
+                                    height: data.height || 1024,
+                                }),
+                            }
+                        );
+                        const result = await response.json();
+                        if (!result.images?.length) {
+                            throw new Error("No images generated");
+                        }
+                        const base64Images = await Promise.all(
+                            result.images.map(async (image) => {
+                                console.log("imageUrl console log", image.url);
+                                let imageUrl;
+                                if (image.url.includes("http")) {
+                                    imageUrl = image.url;
+                                } else {
+                                    imageUrl = `${apiKey}${image.url}`;
+                                }
+                                const imageResponse = await fetch(imageUrl);
+                                if (!imageResponse.ok) {
+                                    throw new Error(
+                                        `Failed to fetch image: ${imageResponse.statusText}`
+                                    );
+                                }
+                                const blob = await imageResponse.blob();
+                                const arrayBuffer = await blob.arrayBuffer();
+                                const base64 =
+                                    Buffer.from(arrayBuffer).toString("base64");
+                                return `data:image/jpeg;base64,${base64}`;
+                            })
+                        );
+                        return {
+                            success: true,
+                            data: base64Images,
+                        };
+                    } catch (error) {
+                        lastError = error;
+                        if (attempt < 3) {
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                            continue;
+                        }
                     }
-                );
-                const result = await response.json();
-                if (!result.images?.length) {
-                    throw new Error("No images generated");
                 }
-                const base64Images = await Promise.all(
-                    result.images.map(async (image) => {
-                        console.log("imageUrl console log", image.url);
-                        let imageUrl;
-                        if (image.url.includes("http")) {
-                            imageUrl = image.url;
-                        } else {
-                            imageUrl = `${apiKey}${image.url}`;
-                        }
-                        const imageResponse = await fetch(imageUrl);
-                        if (!imageResponse.ok) {
-                            throw new Error(
-                                `Failed to fetch image: ${imageResponse.statusText}`
-                            );
-                        }
-                        const blob = await imageResponse.blob();
-                        const arrayBuffer = await blob.arrayBuffer();
-                        const base64 =
-                            Buffer.from(arrayBuffer).toString("base64");
-                        return `data:image/jpeg;base64,${base64}`;
-                    })
-                );
-                return {
-                    success: true,
-                    data: base64Images,
-                };
+                console.error(lastError);
+                return { success: false, error: lastError };
             } catch (error) {
                 console.error(error);
                 return { success: false, error: error };
