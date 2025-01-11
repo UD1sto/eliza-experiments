@@ -503,8 +503,7 @@ export const models: Models = {
             stop: [],
             maxInputTokens: 128000,
             maxOutputTokens: 8192,
-            repetition_penalty: 0.4,
-            temperature: 0.7,
+            temperature: 0,
         },
         model: {
             [ModelClass.SMALL]: settings.SMALL_LIVEPEER_MODEL || "meta-llama/Meta-Llama-3.1-8B-Instruct",
