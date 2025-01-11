@@ -187,7 +187,7 @@ export async function generateText({
     customSystemPrompt?: string;
 }): Promise<string> {
     if (!context) {
-        console.error("generateText context is empty");
+        elizaLogger.error("generateText context is empty");
         return "";
     }
 
@@ -796,7 +796,7 @@ export async function generateText({
 
                 // Remove temperature since it's not in working curl
 
-                console.log("Livepeer request:", {
+                elizaLogger.debug("Livepeer request:", {
                     url: endpoint + "/llm",
                     body: requestBody
                 });
@@ -817,7 +817,7 @@ export async function generateText({
                         keepalive: true // Similar to -N in curl
                     });
 
-                    console.log("Livepeer response status:", fetchResponse.status, fetchResponse.statusText);
+                    elizaLogger.log("Livepeer response status:", fetchResponse.status, fetchResponse.statusText);
 
                     if (!fetchResponse.ok) {
                         const errorText = await fetchResponse.text();
@@ -826,7 +826,7 @@ export async function generateText({
                         );
                     }
                     const json = await fetchResponse.json();
-                    console.log("Livepeer response:", json);
+                    elizaLogger.log("Livepeer response:", json);
 
                     if (
                         !json ||
