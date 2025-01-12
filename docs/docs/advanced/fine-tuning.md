@@ -25,6 +25,7 @@ enum ModelProviderName {
   REDPILL,
   OPENROUTER,
   HEURIST,
+  LIVEPEER,
 }
 ```
 
@@ -288,6 +289,27 @@ const heuristSettings = {
     [ModelClass.LARGE]: "nvidia/llama-3.1-nemotron-70b-instruct",
     [ModelClass.EMBEDDING]: "", // Add later
     [ModelClass.IMAGE]: "FLUX.1-dev",
+  },
+};
+```
+
+### Livepeer Provider
+
+```typescript
+const livepeerSettings = {
+  settings: {
+    stop: [],
+    maxInputTokens: 128000,
+    maxOutputTokens: 8192,
+    repetition_penalty: 0.4,
+    temperature: 0.7,
+  },
+  endpoint: "https://dream-gateway.livepeer.cloud",
+  model: {
+    [ModelClass.SMALL]: "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    [ModelClass.MEDIUM]: "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    [ModelClass.LARGE]: "meta-llama/Llama-3.3-70B-Instruct",
+    [ModelClass.IMAGE]: "ByteDance/SDXL-Lightning",
   },
 };
 ```
