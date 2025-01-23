@@ -1157,6 +1157,55 @@ export async function generateText({
                 elizaLogger.debug("Received response from Deepseek model.");
                 break;
             }
+        
+            case ModelProviderName.LIVEPEER: {
+                elizaLogger.debug("Initializing Livepeer model.");
+            
+                if (!endpoint) {
+                    throw new Error("Livepeer Gateway URL is not defined");
+                }
+            
+                const requestBody = {
+                    model: model,
+                    messages: [
+                        {
+                            role: "system",
+                            content: runtime.character.system ?? settings.SYSTEM_PROMPT ?? "You are a helpful assistant"
+                        },
+                        {
+                            role: "user",
+                            content: context
+                        }
+                    ],
+                    max_tokens: max_response_length,
+                    stream: false
+                };
+            
+                const fetchResponse = await runtime.fetch(endpoint+'/llm', {
+                    method: "POST",
+                    headers: {
+                        "accept": "text/event-stream",
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer eliza-app-llm"
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+            
+                if (!fetchResponse.ok) {
+                    const errorText = await fetchResponse.text();
+                    throw new Error(`Livepeer request failed (${fetchResponse.status}): ${errorText}`);
+                }
+            
+                const json = await fetchResponse.json();
+                
+                if (!json?.choices?.[0]?.message?.content) {
+                    throw new Error("Invalid response format from Livepeer");
+                }
+            
+                response = json.choices[0].message.content.replace(/<\|start_header_id\|>assistant<\|end_header_id\|>\n\n/, '');
+                elizaLogger.debug("Successfully received response from Livepeer model");
+                break;
+            }
 
             default: {
                 const errorMessage = `Unsupported provider: ${provider}`;
